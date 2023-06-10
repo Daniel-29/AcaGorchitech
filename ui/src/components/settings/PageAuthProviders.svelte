@@ -24,7 +24,7 @@
             const result = (await ApiClient.settings.getAll()) || {};
             initSettings(result);
         } catch (err) {
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         isLoading = false;

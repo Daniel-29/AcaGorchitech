@@ -15,7 +15,6 @@
     import SchemaFieldJson from "@/components/collections/schema/SchemaFieldJson.svelte";
     import SchemaFieldFile from "@/components/collections/schema/SchemaFieldFile.svelte";
     import SchemaFieldRelation from "@/components/collections/schema/SchemaFieldRelation.svelte";
-    import Draggable from "@/components/base/Draggable.svelte";
 
     export let collection = new Collection();
 
@@ -87,6 +86,44 @@
             CommonHelper.replaceIndexColumn(idx, oldName, newName)
         );
     }
+
+    // ---------------------------------------------------------------
+    // fields drag&drop handling
+    // ---------------------------------------------------------------
+
+    function onFieldDrag(event, i) {
+        if (!event) {
+            return;
+        }
+
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.dropEffect = "move";
+        event.dataTransfer.setData("text/plain", i);
+    }
+
+    function onFieldDrop(event, target) {
+        if (!event) {
+            return;
+        }
+
+        event.dataTransfer.dropEffect = "move";
+
+        const start = parseInt(event.dataTransfer.getData("text/plain"));
+        const newSchema = collection.schema;
+
+        if (start < target) {
+            newSchema.splice(target + 1, 0, newSchema[start]);
+            newSchema.splice(start, 1);
+        } else {
+            newSchema.splice(target, 0, newSchema[start]);
+            newSchema.splice(start + 1, 1);
+        }
+
+        collection.schema = newSchema;
+
+        // reset errors since the schema keys index has changed
+        setErrors({});
+    }
 </script>
 
 <div class="block m-b-25">
@@ -106,38 +143,17 @@
     </p>
 </div>
 
-<div class="schema-fields">
+<div class="accordions schema-fields">
     {#each collection.schema as field, i (field)}
-        <Draggable
-            bind:list={collection.schema}
-            index={i}
-            disabled={field.toDelete || (field.id && field.system)}
-            dragHandleClass="drag-handle-wrapper"
-            on:drag={(e) => {
-                // blank drag placeholder
-                if (!e.detail) {
-                    return;
-                }
-                const ghost = e.detail.target;
-                ghost.style.opacity = 0;
-                setTimeout(() => {
-                    ghost?.style?.removeProperty("opacity"); // restore
-                }, 0);
-                e.detail.dataTransfer.setDragImage(ghost, 0, 0);
-            }}
-            on:sort={() => {
-                // reset errors since the schema keys index has changed
-                setErrors({});
-            }}
-        >
-            <svelte:component
-                this={fieldComponents[field.type]}
-                key={getSchemaFieldIndex(field)}
-                bind:field
-                on:remove={() => removeField(i)}
-                on:rename={(e) => replaceIndexesColumn(e.detail.oldName, e.detail.newName)}
-            />
-        </Draggable>
+        <svelte:component
+            this={fieldComponents[field.type]}
+            key={getSchemaFieldIndex(field)}
+            bind:field
+            on:remove={() => removeField(i)}
+            on:rename={(e) => replaceIndexesColumn(e.detail.oldName, e.detail.newName)}
+            on:dragstart={(e) => onFieldDrag(e.detail, i)}
+            on:drop={(e) => onFieldDrop(e.detail, i)}
+        />
     {/each}
 </div>
 

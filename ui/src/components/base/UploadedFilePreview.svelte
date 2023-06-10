@@ -11,23 +11,22 @@
     $: previewUrl = "";
 
     function loadPreviewUrl() {
+        previewUrl = "";
+
         if (CommonHelper.hasImageExtension(file?.name)) {
             CommonHelper.generateThumb(file, size, size)
                 .then((url) => {
                     previewUrl = url;
                 })
                 .catch((err) => {
-                    previewUrl = "";
                     console.warn("Unable to generate thumb: ", err);
                 });
-        } else {
-            previewUrl = "";
         }
     }
 </script>
 
 {#if previewUrl}
-    <img draggable={false} src={previewUrl} width={size} height={size} alt={file.name} />
+    <img src={previewUrl} width={size} height={size} alt={file.name} />
 {:else}
     <i class="ri-file-line" alt={file.name} />
 {/if}

@@ -368,19 +368,15 @@ func realUserIp(r *http.Request, fallbackIp string) string {
 		return ip
 	}
 
-	if ip := r.Header.Get("Fly-Client-IP"); ip != "" {
-		return ip
-	}
-
 	if ip := r.Header.Get("X-Real-IP"); ip != "" {
 		return ip
 	}
 
 	if ipsList := r.Header.Get("X-Forwarded-For"); ipsList != "" {
-		// extract the first non-empty leftmost-ish ip
 		ips := strings.Split(ipsList, ",")
-		for _, ip := range ips {
-			ip = strings.TrimSpace(ip)
+		// extract the rightmost ip
+		for i := len(ips) - 1; i >= 0; i-- {
+			ip := strings.TrimSpace(ips[i])
 			if ip != "" {
 				return ip
 			}

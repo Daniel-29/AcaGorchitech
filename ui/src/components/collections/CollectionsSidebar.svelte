@@ -65,7 +65,6 @@
             <a
                 href="/collections?collectionId={collection.id}"
                 class="sidebar-list-item"
-                title={collection.name}
                 class:active={$activeCollection?.id === collection.id}
                 use:link
             >

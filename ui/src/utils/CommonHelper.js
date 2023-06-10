@@ -285,7 +285,7 @@ export default class CommonHelper {
         const result = JSON.parse(JSON.stringify(obj || {}));
 
         for (let prop in result) {
-            if (typeof result[prop] === "object" && result[prop] !== null) {
+            if (typeof result[prop] === 'object' && result[prop] !== null) {
                 result[prop] = CommonHelper.filterRedactedProps(result[prop], mask)
             } else if (result[prop] === mask) {
                 delete result[prop];
@@ -313,7 +313,7 @@ export default class CommonHelper {
      */
     static getNestedVal(data, path, defaultVal = null, delimiter = ".") {
         let result = data || {};
-        let parts  = (path || "").split(delimiter);
+        let parts  = (path || '').split(delimiter);
 
         for (const part of parts) {
             if (
@@ -343,7 +343,7 @@ export default class CommonHelper {
      * @param  {String}       delimiter
      */
     static setByPath(data, path, newValue, delimiter = ".") {
-        if (data === null || typeof data !== "object") {
+        if (data === null || typeof data !== 'object') {
             console.warn("setByPath: data not an object or array.");
             return
         }
@@ -382,7 +382,7 @@ export default class CommonHelper {
      */
     static deleteByPath(data, path, delimiter = ".") {
         let result   = data || {};
-        let parts    = (path || "").split(delimiter);
+        let parts    = (path || '').split(delimiter);
         let lastPart = parts.pop();
 
         for (const part of parts) {
@@ -533,7 +533,7 @@ export default class CommonHelper {
         for (let key in obj) {
             let value = obj[key];
 
-            if (typeof value === "string") {
+            if (typeof value === 'string') {
                 value = CommonHelper.truncate(value, 150, true);
             }
 
@@ -551,47 +551,47 @@ export default class CommonHelper {
      * @param  {Array}  [preserved]
      * @return {String}
      */
-    static slugify(str, delimiter = "_", preserved = [".", "=", "-"]) {
-        if (str === "") {
-            return "";
+    static slugify(str, delimiter = '_', preserved = ['.', '=', '-']) {
+        if (str === '') {
+            return '';
         }
 
         // special characters
         const specialCharsMap = {
-            "a": /а|à|á|å|â/gi,
-            "b": /б/gi,
-            "c": /ц|ç/gi,
-            "d": /д/gi,
-            "e": /е|è|é|ê|ẽ|ë/gi,
-            "f": /ф/gi,
-            "g": /г/gi,
-            "h": /х/gi,
-            "i": /й|и|ì|í|î/gi,
-            "j": /ж/gi,
-            "k": /к/gi,
-            "l": /л/gi,
-            "m": /м/gi,
-            "n": /н|ñ/gi,
-            "o": /о|ò|ó|ô|ø/gi,
-            "p": /п/gi,
-            "q": /я/gi,
-            "r": /р/gi,
-            "s": /с/gi,
-            "t": /т/gi,
-            "u": /ю|ù|ú|ů|û/gi,
-            "v": /в/gi,
-            "w": /в/gi,
-            "x": /ь/gi,
-            "y": /ъ/gi,
-            "z": /з/gi,
-            "ae": /ä|æ/gi,
-            "oe": /ö/gi,
-            "ue": /ü/gi,
-            "Ae": /Ä/gi,
-            "Ue": /Ü/gi,
-            "Oe": /Ö/gi,
-            "ss": /ß/gi,
-            "and": /&/gi
+            'a': /а|à|á|å|â/gi,
+            'b': /б/gi,
+            'c': /ц|ç/gi,
+            'd': /д/gi,
+            'e': /е|è|é|ê|ẽ|ë/gi,
+            'f': /ф/gi,
+            'g': /г/gi,
+            'h': /х/gi,
+            'i': /й|и|ì|í|î/gi,
+            'j': /ж/gi,
+            'k': /к/gi,
+            'l': /л/gi,
+            'm': /м/gi,
+            'n': /н|ñ/gi,
+            'o': /о|ò|ó|ô|ø/gi,
+            'p': /п/gi,
+            'q': /я/gi,
+            'r': /р/gi,
+            's': /с/gi,
+            't': /т/gi,
+            'u': /ю|ù|ú|ů|û/gi,
+            'v': /в/gi,
+            'w': /в/gi,
+            'x': /ь/gi,
+            'y': /ъ/gi,
+            'z': /з/gi,
+            'ae': /ä|æ/gi,
+            'oe': /ö/gi,
+            'ue': /ü/gi,
+            'Ae': /Ä/gi,
+            'Ue': /Ü/gi,
+            'Oe': /Ö/gi,
+            'ss': /ß/gi,
+            'and': /&/gi
         };
 
         // replace special characters
@@ -599,10 +599,12 @@ export default class CommonHelper {
             str = str.replace(specialCharsMap[k], k);
         }
 
-        return str
-            .replace(new RegExp('[' + preserved.join("") + ']', 'g'), ' ') // replace preserved characters with spaces
-            .replace(/[^\w\ ]/gi, "")                                      // replaces all non-alphanumeric with empty string
+        const slug = str
+            .replace(new RegExp('[' + preserved.join('') + ']', 'g'), ' ') // replace preserved characters with spaces
+            .replace(/[^\w\ ]/gi, '')                                      // replaces all non-alphanumeric with empty string
             .replace(/\s+/g, delimiter);                                   // collapse whitespaces and replace with `delimiter`
+
+        return slug.charAt(0).toLowerCase() + slug.slice(1);
     }
 
     /**
@@ -666,7 +668,7 @@ export default class CommonHelper {
      * @return {String}
      */
     static getInitials(str) {
-        str = (str || "").split("@")[0].trim();
+        str = (str || '').split('@')[0].trim();
 
         if (str.length <= 2) {
             return str.toUpperCase();
@@ -682,25 +684,13 @@ export default class CommonHelper {
     }
 
     /**
-     * Returns a human readable file size string from size in bytes.
-     *
-     * @param  {Number} size s
-     * @return {String}
-     */
-    static formattedFileSize(size) {
-        const i = size ? Math.floor(Math.log(size) / Math.log(1024)) : 0;
-
-        return (size / Math.pow(1024, i)).toFixed(2) * 1 + " " + ["B", "KB", "MB", "GB", "TB"][i];
-    }
-
-    /**
      * Returns a DateTime instance from a date object/string.
      *
      * @param  {String|Date} date
      * @return {DateTime}
      */
     static getDateTime(date) {
-        if (typeof date === "string") {
+        if (typeof date === 'string') {
             const formats = {
                 19: "yyyy-MM-dd HH:mm:ss",
                 23: "yyyy-MM-dd HH:mm:ss.SSS",
@@ -708,7 +698,7 @@ export default class CommonHelper {
                 24: "yyyy-MM-dd HH:mm:ss.SSS'Z'",
             }
             const format = formats[date.length] || formats[19];
-            return DateTime.fromFormat(date, format, { zone: "UTC" });
+            return DateTime.fromFormat(date, format, { zone: 'UTC' });
         }
 
         return DateTime.fromJSDate(date);
@@ -721,7 +711,7 @@ export default class CommonHelper {
      * @param  {String}      [format] The result format (see https://moment.github.io/luxon/#/parsing?id=table-of-tokens)
      * @return {String}
      */
-    static formatToUTCDate(date, format = "yyyy-MM-dd HH:mm:ss") {
+    static formatToUTCDate(date, format = 'yyyy-MM-dd HH:mm:ss') {
         return CommonHelper.getDateTime(date).toUTC().toFormat(format);
     }
 
@@ -732,7 +722,7 @@ export default class CommonHelper {
      * @param  {String}      [format] The result format (see https://moment.github.io/luxon/#/parsing?id=table-of-tokens)
      * @return {String}
      */
-    static formatToLocalDate(date, format = "yyyy-MM-dd HH:mm:ss") {
+    static formatToLocalDate(date, format = 'yyyy-MM-dd HH:mm:ss') {
         return CommonHelper.getDateTime(date).toLocal().toFormat(format);
     }
 
@@ -755,31 +745,19 @@ export default class CommonHelper {
     }
 
     /**
-     * Forces the browser to start downloading the specified url.
-     *
-     * @param {String} url  The url of the file to download.
-     * @param {String} name The result file name.
-     */
-    static download(url, name) {
-        const tempLink = document.createElement("a");
-        tempLink.setAttribute("href", url);
-        tempLink.setAttribute("download", name);
-        tempLink.click();
-        tempLink.remove();
-    }
-
-    /**
      * Downloads a json file created from the provide object.
      *
      * @param {mixed} obj   The JS object to download.
-     * @param {String} name The result file name.
+     * @param {String} name  The result file name.
      */
     static downloadJson(obj, name) {
         const encodedObj = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj, null, 2));
 
-        name = name.endsWith(".json") ? name : (name + ".json");
-
-        CommonHelper.download(encodedObj, name)
+        const tempLink = document.createElement('a');
+        tempLink.setAttribute("href", encodedObj);
+        tempLink.setAttribute("download", name + ".json");
+        tempLink.click();
+        tempLink.remove();
     }
 
     /**
@@ -789,7 +767,7 @@ export default class CommonHelper {
      * @return {Object}
      */
     static getJWTPayload(jwt) {
-        const raw = (jwt || "").split(".")[1] || "";
+        const raw = (jwt || '').split(".")[1] || '';
         if (raw === "") {
             return {};
         }
@@ -1417,9 +1395,16 @@ export default class CommonHelper {
                 continue
             }
 
-            val = CommonHelper.stringifyValue(val, missingValue)
-
-            result.push(val);
+            if (CommonHelper.isEmpty(val)) {
+                result.push(missingValue);
+            } else if (typeof val === "boolean")  {
+                result.push(val ? "True" : "False");
+            } else if (typeof val === "string") {
+                val = val.indexOf("<") >= 0 ? CommonHelper.plainText(val) : val;
+                result.push(CommonHelper.truncate(val));
+            } else {
+                result.push(val);
+            }
         }
 
         if (result.length > 0) {
@@ -1429,60 +1414,21 @@ export default class CommonHelper {
         const fallbackProps = [
             "title",
             "name",
-            "slug",
             "email",
             "username",
-            "label",
             "heading",
-            "message",
+            "label",
             "key",
             "id",
         ];
 
         for (const prop of fallbackProps) {
-            let val = CommonHelper.stringifyValue(model[prop], "");
-            if (val) {
-                return val;
+            if (!CommonHelper.isEmpty(model[prop])) {
+                return model[prop];
             }
         }
 
         return missingValue;
-    }
-
-    /**
-     * Stringifies the provided value or fallback to missingValue in case it is empty.
-     *
-     * @param  {Mixed}  val
-     * @param  {String} missingValue
-     * @return {String}
-     */
-    static stringifyValue(val, missingValue = "N/A") {
-        if (CommonHelper.isEmpty(val)) {
-            return missingValue;
-        }
-
-        if (typeof val === "boolean")  {
-            return val ? "True" : "False";
-        }
-
-        if (typeof val === "string") {
-            val = val.indexOf("<") >= 0 ? CommonHelper.plainText(val) : val;
-            return CommonHelper.truncate(val) || missingValue;
-        }
-
-        if (Array.isArray(val)) {
-            return val.join(",");
-        }
-
-        if (typeof val === "object") {
-            try {
-                return CommonHelper.truncate(JSON.stringify(val)) || missingValue;
-            } catch (_) {
-                return missingValue;
-            }
-        }
-
-        return "" + val;
     }
 
     /**

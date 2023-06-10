@@ -1,0 +1,43 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    container_name: gorchitech-dbPostgres
+    restart: always
+    environment:
+      POSTGRES_USER: gorchitechUser
+      POSTGRES_PASSWORD: gorchitechPassword
+      POSTGRES_DB: gorchitechDatabase
+    ports:
+      - "5432:5432"
+#    volumes:
+#      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d  # init scripts con datos de prueba
+    volumes:
+      - ./script:/docker-entrypoint-initdb.d        # init scripts sin datos de prueba
+
+# run sudo docker-compose up --build -d
+
+#  pgadmin:
+#   container_name: pgadmin4_container
+#   image: dpage/pgadmin4
+#   environment:
+#     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#     PGADMIN_DEFAULT_PASSWORD: root
+#   ports:
+#     - "5050:80"
+
+##    restart: always
+
+##c Servers > Create > Server
+
+## name my_db
+
+## ==> Connection
+
+## Host name : pg_container
+
+## Port : 5432
+
+## Username gorchitechUser
+
+## Password gorchitechPassword ---> Save

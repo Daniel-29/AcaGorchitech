@@ -190,10 +190,9 @@ func (api *recordAuthApi) authWithOAuth2(c echo.Context) error {
 
 	form.SetBeforeNewRecordCreateFunc(func(createForm *forms.RecordUpsert, authRecord *models.Record, authUser *auth.AuthUser) error {
 		return createForm.DrySubmit(func(txDao *daos.Dao) error {
-			event.IsNewRecord = true
-			// clone the current request data and assign the form create data as its body data
-			requestData := *RequestData(c)
+			requestData := RequestData(c)
 			requestData.Data = form.CreateData
+			event.IsNewRecord = true
 
 			createRuleFunc := func(q *dbx.SelectQuery) error {
 				admin, _ := c.Get(ContextAdminKey).(*models.Admin)
@@ -206,7 +205,7 @@ func (api *recordAuthApi) authWithOAuth2(c echo.Context) error {
 				}
 
 				if *collection.CreateRule != "" {
-					resolver := resolvers.NewRecordFieldResolver(txDao, collection, &requestData, true)
+					resolver := resolvers.NewRecordFieldResolver(txDao, collection, requestData, true)
 					expr, err := search.FilterData(*collection.CreateRule).BuildExpr(resolver)
 					if err != nil {
 						return err
@@ -243,15 +242,7 @@ func (api *recordAuthApi) authWithOAuth2(c echo.Context) error {
 				e.Record = data.Record
 				e.OAuth2User = data.OAuth2User
 
-				meta := struct {
-					*auth.AuthUser
-					IsNew bool `json:"isNew"`
-				}{
-					AuthUser: e.OAuth2User,
-					IsNew:    event.IsNewRecord,
-				}
-
-				return RecordAuthResponse(api.app, e.HttpContext, e.Record, meta)
+				return RecordAuthResponse(api.app, e.HttpContext, e.Record, e.OAuth2User)
 			})
 		}
 	})

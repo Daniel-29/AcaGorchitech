@@ -65,10 +65,6 @@ type BootstrapEvent struct {
 	App App
 }
 
-type TerminateEvent struct {
-	App App
-}
-
 type ServeEvent struct {
 	App    App
 	Router *echo.Echo

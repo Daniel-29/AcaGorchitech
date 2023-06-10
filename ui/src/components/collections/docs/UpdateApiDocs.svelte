@@ -4,7 +4,6 @@
     import CommonHelper from "@/utils/CommonHelper";
     import CodeBlock from "@/components/base/CodeBlock.svelte";
     import SdkTabs from "@/components/collections/docs/SdkTabs.svelte";
-    import FieldsQueryParam from "@/components/collections/docs/FieldsQueryParam.svelte";
 
     export let collection = new Collection();
 
@@ -331,7 +330,6 @@ final record = await pb.collection('${collection?.name}').update('RECORD_ID', bo
                 the relations that the user has permissions to <strong>view</strong> will be expanded.
             </td>
         </tr>
-        <FieldsQueryParam />
     </tbody>
 </table>
 

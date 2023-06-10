@@ -16,8 +16,6 @@ func TestHealthAPI(t *testing.T) {
 			ExpectedStatus: 200,
 			ExpectedContent: []string{
 				`"code":200`,
-				`"data":{`,
-				`"canBackup":true`,
 			},
 		},
 	}

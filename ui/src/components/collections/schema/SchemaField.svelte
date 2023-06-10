@@ -1,7 +1,3 @@
-<script context="module">
-    let siblings = [];
-</script>
-
 <script>
     import { createEventDispatcher, onMount } from "svelte";
     import { slide } from "svelte/transition";
@@ -12,21 +8,19 @@
     import Toggler from "@/components/base/Toggler.svelte";
     import Field from "@/components/base/Field.svelte";
 
-    const componentId = "f_" + CommonHelper.randomString(8);
+    export let key = "";
+    export let field = new SchemaField();
+
+    let nameInput;
+    let optionsTrigger;
+    let isDragOver = false;
 
     const dispatch = createEventDispatcher();
-
     const customRequiredLabels = {
         // type => label
         bool: "Nonfalsey",
         number: "Nonzero",
     };
-
-    export let key = "";
-    export let field = new SchemaField();
-
-    let nameInput;
-    let showOptions = false;
 
     $: if (field.toDelete) {
         // reset the name if it was previously deleted
@@ -72,59 +66,52 @@
         return CommonHelper.slugify(name);
     }
 
-    function expand() {
-        showOptions = true;
-        collapseSiblings();
-    }
-
-    function collapse() {
-        showOptions = false;
-    }
-
-    function toggle() {
-        if (showOptions) {
-            collapse();
-        } else {
-            expand();
-        }
-    }
-
-    function collapseSiblings() {
-        for (let f of siblings) {
-            if (f.id == componentId) {
-                continue;
-            }
-            f.collapse();
-        }
-    }
-
     onMount(() => {
-        siblings.push({
-            id: componentId,
-            collapse: collapse,
-        });
-
         if (field.onMountSelect) {
             field.onMountSelect = false;
             nameInput?.select();
         }
-
-        return () => {
-            CommonHelper.removeByKey(siblings, "id", componentId);
-        };
     });
 </script>
 
 <div
+    draggable={true}
     class="schema-field"
-    class:required={field.required}
-    class:expanded={interactive && showOptions}
-    class:deleted={field.toDelete}
+    class:drag-over={isDragOver}
     transition:slide|local={{ duration: 150 }}
+    on:dragstart={(e) => {
+        if (!e.target.classList.contains("drag-handle-wrapper")) {
+            e.preventDefault();
+            return;
+        }
+
+        const blank = document.createElement("div");
+        e.dataTransfer.setDragImage(blank, 0, 0);
+        interactive && dispatch("dragstart", e);
+    }}
+    on:dragenter={(e) => {
+        if (interactive) {
+            isDragOver = true;
+            dispatch("dragenter", e);
+        }
+    }}
+    on:drop|preventDefault={(e) => {
+        if (interactive) {
+            isDragOver = false;
+            dispatch("drop", e);
+        }
+    }}
+    on:dragleave={(e) => {
+        if (interactive) {
+            isDragOver = false;
+            dispatch("dragleave", e);
+        }
+    }}
+    on:dragover|preventDefault
 >
     <div class="schema-field-header">
         {#if interactive}
-            <div class="drag-handle-wrapper" draggable={true} aria-label="Sort">
+            <div class="drag-handle-wrapper" draggable="true" aria-label="Sort">
                 <span class="drag-handle" />
             </div>
         {/if}
@@ -167,9 +154,7 @@
             />
         </Field>
 
-        <slot {interactive} {hasErrors}>
-            <span class="separator" />
-        </slot>
+        <slot {interactive} {hasErrors} />
 
         {#if field.toDelete}
             <button
@@ -183,22 +168,20 @@
             </button>
         {:else if interactive}
             <button
+                bind:this={optionsTrigger}
                 type="button"
-                aria-label="Toggle field options"
-                class="btn btn-sm btn-circle options-trigger {showOptions
-                    ? 'btn-secondary'
-                    : 'btn-transparent'}"
-                class:btn-hint={!showOptions && !hasErrors}
-                class:btn-danger={hasErrors}
-                on:click={toggle}
+                aria-label="Field options"
+                class="btn btn-sm btn-circle btn-transparent options-trigger {hasErrors
+                    ? 'btn-danger'
+                    : 'btn-hint'}"
             >
                 <i class="ri-settings-3-line" />
             </button>
         {/if}
     </div>
 
-    {#if interactive && showOptions}
-        <div class="schema-field-options" transition:slide|local={{ duration: 150 }}>
+    {#if interactive}
+        <Toggler class="dropdown dropdown-block schema-field-dropdown" trigger={optionsTrigger}>
             <div class="grid grid-sm">
                 <div class="col-sm-12 hidden-empty">
                     <slot name="options" {interactive} {hasErrors} />
@@ -248,6 +231,6 @@
                     </div>
                 {/if}
             </div>
-        </div>
+        </Toggler>
     {/if}
 </div>

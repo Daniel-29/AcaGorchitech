@@ -40,12 +40,20 @@
     }
 </script>
 
-<SchemaField bind:field {key} on:rename on:remove {...$$restProps}>
+<SchemaField
+    bind:field
+    {key}
+    on:rename
+    on:remove
+    on:drop
+    on:dragstart
+    on:dragenter
+    on:dragleave
+    {...$$restProps}
+>
     <svelte:fragment let:interactive>
-        <div class="separator" />
-
         <Field
-            class="form-field required {!interactive ? 'readonly' : ''}"
+            class="form-field required {!interactive ? 'disabled' : ''}"
             inlineError
             name="schema.{key}.options.values"
             let:uniqueId
@@ -55,28 +63,23 @@
                     id={uniqueId}
                     placeholder="Choices: eg. optionA, optionB"
                     required
-                    readonly={!interactive}
+                    disabled={!interactive}
                     bind:value={field.options.values}
                 />
             </div>
         </Field>
-
-        <div class="separator" />
-
         <Field
-            class="form-field form-field-single-multiple-select {!interactive ? 'readonly' : ''}"
+            class="form-field form-field-single-multiple-select {!interactive ? 'disabled' : ''}"
             inlineError
             let:uniqueId
         >
             <ObjectSelect
                 id={uniqueId}
                 items={isSingleOptions}
-                readonly={!interactive}
+                disabled={!interactive}
                 bind:keyOfSelected={isSingle}
             />
         </Field>
-
-        <div class="separator" />
     </svelte:fragment>
 
     <svelte:fragment slot="options">

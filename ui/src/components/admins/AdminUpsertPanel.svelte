@@ -82,15 +82,14 @@
                 confirmClose = false;
                 hide();
                 addSuccessToast(admin.$isNew ? "Successfully created admin." : "Successfully updated admin.");
+                dispatch("save", result);
 
                 if (ApiClient.authStore.model?.id === result.id) {
                     ApiClient.authStore.save(ApiClient.authStore.token, result);
                 }
-
-                dispatch("save", result);
             })
             .catch((err) => {
-                ApiClient.error(err);
+                ApiClient.errorResponseHandler(err);
             })
             .finally(() => {
                 isSaving = false;
@@ -112,7 +111,7 @@
                     dispatch("delete", admin);
                 })
                 .catch((err) => {
-                    ApiClient.error(err);
+                    ApiClient.errorResponseHandler(err);
                 });
         });
     }

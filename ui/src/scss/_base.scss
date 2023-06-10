@@ -511,10 +511,9 @@ a,
 .thumb {
     --thumbSize: 40px;
 
-    display: inline-flex;
-    vertical-align: top;
-    position: relative;
     flex-shrink: 0;
+    position: relative;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
@@ -773,7 +772,7 @@ a.thumb:not(.thumb-active) {
             align-items: center;
             margin: -1px -5px -1px 0;
             &.nonintrusive {
-                opacity: 0;
+                @include hide();
                 transform: translateX(5px);
                 transition: transform var(--baseAnimationSpeed),
                             opacity var(--baseAnimationSpeed),
@@ -781,12 +780,9 @@ a.thumb:not(.thumb-active) {
             }
         }
         &:hover,
-        &:focus-visible,
-        &:focus-within,
         &:active {
-            background: var(--bodyColor);
             .actions.nonintrusive {
-                opacity: 1;
+                @include show();
                 transform: translateX(0);
             }
         }
@@ -811,28 +807,13 @@ a.thumb:not(.thumb-active) {
         }
     }
 
-    .list-item-placeholder {
-        color: var(--txtHintColor);
-    }
-
     .list-item-btn {
         padding: 5px;
         min-height: auto;
     }
 
-    .list-item-placeholder,
-    .list-item-btn {
-        &:hover,
-        &:focus-visible,
-        &:focus-within,
-        &:active {
-            background: none;
-        }
-    }
-
     &.list-compact {
         .list-item {
-            gap: 10px;
             min-height: 40px;
         }
     }

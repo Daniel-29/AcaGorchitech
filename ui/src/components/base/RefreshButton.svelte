@@ -7,9 +7,6 @@
     let tooltipData = { text: "Refresh", position: "right" };
     export { tooltipData as tooltip };
 
-    let classes = "";
-    export { classes as class };
-
     let refreshTimeoutId = null;
 
     function refresh() {
@@ -34,7 +31,7 @@
 <button
     type="button"
     aria-label="Refresh"
-    class="btn btn-transparent btn-circle {classes}"
+    class="btn btn-transparent btn-circle"
     class:refreshing={refreshTimeoutId}
     use:tooltip={tooltipData}
     on:click={refresh}

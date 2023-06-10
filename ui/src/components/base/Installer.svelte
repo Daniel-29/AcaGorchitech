@@ -28,7 +28,7 @@
 
             dispatch("submit");
         } catch (err) {
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         isLoading = false;

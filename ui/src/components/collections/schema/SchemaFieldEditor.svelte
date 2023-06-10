@@ -5,4 +5,14 @@
     export let key = "";
 </script>
 
-<SchemaField bind:field {key} on:rename on:remove {...$$restProps} />
+<SchemaField
+    bind:field
+    {key}
+    on:rename
+    on:remove
+    on:drop
+    on:dragstart
+    on:dragenter
+    on:dragleave
+    {...$$restProps}
+/>

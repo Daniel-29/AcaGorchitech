@@ -19,7 +19,7 @@
             await ApiClient.admins.requestPasswordReset(email);
             success = true;
         } catch (err) {
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         isLoading = false;

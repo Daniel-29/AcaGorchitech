@@ -45,7 +45,7 @@
             const settings = (await ApiClient.settings.getAll()) || {};
             init(settings);
         } catch (err) {
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         isLoading = false;
@@ -64,7 +64,7 @@
             setErrors({});
             addSuccessToast("Successfully saved mail settings.");
         } catch (err) {
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         isSaving = false;

@@ -29,7 +29,7 @@
             const settings = (await ApiClient.settings.getAll()) || {};
             init(settings);
         } catch (err) {
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         isLoading = false;
@@ -47,7 +47,7 @@
             init(settings);
             addSuccessToast("Successfully saved application settings.");
         } catch (err) {
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         isSaving = false;

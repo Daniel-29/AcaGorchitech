@@ -44,7 +44,6 @@ func (t *TestApp) Cleanup() {
 	}
 }
 
-// NewMailClient initializes test app mail client.
 func (t *TestApp) NewMailClient() mailer.Mailer {
 	t.mux.Lock()
 	defer t.mux.Unlock()
@@ -102,14 +101,6 @@ func NewTestApp(optTestDataDir ...string) (*TestApp, error) {
 
 	// load data dir and db connections
 	if err := app.Bootstrap(); err != nil {
-		return nil, err
-	}
-
-	// ensure that the Dao and DB configurations are properly loaded
-	if _, err := app.Dao().DB().NewQuery("Select 1").Execute(); err != nil {
-		return nil, err
-	}
-	if _, err := app.LogsDao().DB().NewQuery("Select 1").Execute(); err != nil {
 		return nil, err
 	}
 

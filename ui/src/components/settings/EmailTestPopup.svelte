@@ -72,7 +72,7 @@
             hide();
         } catch (err) {
             isSubmitting = false;
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         clearTimeout(testTimeoutId);

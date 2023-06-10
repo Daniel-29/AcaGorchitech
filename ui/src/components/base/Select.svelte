@@ -11,7 +11,6 @@
     export let items = [];
     export let multiple = false;
     export let disabled = false;
-    export let readonly = false;
     export let selected = multiple ? [] : undefined;
     export let toggle = multiple; // toggle option on click
     export let closable = true; // close the dropdown on option select/deselect
@@ -157,9 +156,6 @@
     function handleOptionKeypress(e, item) {
         if (e.code === "Enter" || e.code === "Space") {
             handleOptionSelect(e, item);
-            if (closable) {
-                hideDropdown();
-            }
         }
     }
 
@@ -181,7 +177,7 @@
     function onLabelClick(e) {
         e.stopPropagation();
 
-        !readonly && !disabled && toggler?.toggle();
+        !disabled && toggler?.toggle();
     }
 
     onMount(() => {
@@ -199,15 +195,9 @@
     });
 </script>
 
-<div bind:this={container} class="select {classes}" class:multiple class:disabled class:readonly>
+<div bind:this={container} class="select {classes}" class:multiple class:disabled>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <div
-        bind:this={labelDiv}
-        tabindex={disabled || readonly ? "-1" : "0"}
-        class="selected-container"
-        class:disabled
-        class:readonly
-    >
+    <div bind:this={labelDiv} tabindex={disabled ? "-1" : "0"} class="selected-container" class:disabled>
         {#each CommonHelper.toArray(selected) as item, i}
             <div class="option">
                 {#if labelComponent}
@@ -228,13 +218,13 @@
                 {/if}
             </div>
         {:else}
-            <div class="block txt-placeholder" class:link-hint={!disabled && !readonly}>
+            <div class="block txt-placeholder" class:link-hint={!disabled}>
                 {selectPlaceholder}
             </div>
         {/each}
     </div>
 
-    {#if !disabled && !readonly}
+    {#if !disabled}
         <Toggler
             bind:this={toggler}
             class="dropdown dropdown-block options-dropdown dropdown-left"

@@ -28,7 +28,7 @@
     let recordPreviewPanel;
     let recordsList;
     let filter = queryParams.get("filter") || "";
-    let sort = queryParams.get("sort") || "-created";
+    let sort = queryParams.get("sort") || "";
     let selectedCollectionId = queryParams.get("collectionId") || $activeCollection?.id;
 
     $: reactiveParams = new URLSearchParams($querystring);
@@ -44,10 +44,6 @@
     // reset filter and sort on collection change
     $: if ($activeCollection?.id && selectedCollectionId != $activeCollection.id) {
         reset();
-    }
-
-    $: if ($activeCollection?.id) {
-        normalizeSort();
     }
 
     // keep the url params in sync
@@ -67,31 +63,12 @@
         filter = "";
         sort = "-created";
 
-        normalizeSort();
-    }
-
-    // ensures that the sort fields exist in the collection
-    async function normalizeSort() {
-        if (!sort) {
-            return; // nothing to normalize
-        }
-
-        const collectionFields = CommonHelper.getAllCollectionIdentifiers($activeCollection);
-
-        const sortFields = sort.split(",").map((f) => {
-            if (f.startsWith("+") || f.startsWith("-")) {
-                return f.substring(1);
-            }
-            return f;
-        });
-
-        // invalid sort expression or missing sort field
-        if (sortFields.filter((f) => collectionFields.includes(f)).length != sortFields.length) {
-            if (collectionFields.includes("created")) {
-                sort = "-created";
-            } else {
-                sort = "";
-            }
+        // clear default sort if created field is not available
+        if (
+            $activeCollection?.$isView &&
+            !CommonHelper.extractColumnsFromQuery($activeCollection.options.query).includes("created")
+        ) {
+            sort = "";
         }
     }
 

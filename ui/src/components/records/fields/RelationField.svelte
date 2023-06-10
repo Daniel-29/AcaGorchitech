@@ -5,7 +5,6 @@
     import ApiClient from "@/utils/ApiClient";
     import tooltip from "@/actions/tooltip";
     import Field from "@/components/base/Field.svelte";
-    import Draggable from "@/components/base/Draggable.svelte";
     import RecordsPicker from "@/components/records/RecordsPicker.svelte";
     import RecordInfo from "@/components/records/RecordInfo.svelte";
 
@@ -92,7 +91,7 @@
 
             list = list;
         } catch (err) {
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         isLoading = false;
@@ -102,10 +101,6 @@
         CommonHelper.removeByKey(list, "id", rel.id);
         list = list;
 
-        listToValue();
-    }
-
-    function listToValue() {
         if (isMultiple) {
             value = list.map((r) => r.id);
         } else {
@@ -131,34 +126,22 @@
 
     <div class="list">
         <div class="relations-list">
-            {#each list as record, i (record.id)}
-                <Draggable
-                    bind:list
-                    group={field.name + "_relation"}
-                    index={i}
-                    disabled={!isMultiple}
-                    let:dragging
-                    let:dragover
-                    on:sort={() => {
-                        listToValue();
-                    }}
-                >
-                    <div class="list-item" class:dragging class:dragover>
-                        <div class="content">
-                            <RecordInfo {record} displayFields={field.options?.displayFields} />
-                        </div>
-                        <div class="actions">
-                            <button
-                                type="button"
-                                class="btn btn-transparent btn-hint btn-sm btn-circle btn-remove"
-                                use:tooltip={"Remove"}
-                                on:click={() => remove(record)}
-                            >
-                                <i class="ri-close-line" />
-                            </button>
-                        </div>
+            {#each list as record (record.id)}
+                <div class="list-item">
+                    <div class="content">
+                        <RecordInfo {record} displayFields={field.options?.displayFields} />
                     </div>
-                </Draggable>
+                    <div class="actions">
+                        <button
+                            type="button"
+                            class="btn btn-transparent btn-hint btn-sm btn-circle btn-remove"
+                            use:tooltip={"Remove"}
+                            on:click={() => remove(record)}
+                        >
+                            <i class="ri-close-line" />
+                        </button>
+                    </div>
+                </div>
             {:else}
                 {#if isLoading}
                     {#each CommonHelper.toArray(value).slice(0, 10) as _}

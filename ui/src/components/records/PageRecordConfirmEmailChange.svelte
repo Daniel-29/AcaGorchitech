@@ -28,7 +28,7 @@
             await client.collection(payload.collectionId).confirmEmailChange(params?.token, password);
             success = true;
         } catch (err) {
-            ApiClient.error(err);
+            ApiClient.errorResponseHandler(err);
         }
 
         isLoading = false;

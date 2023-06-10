@@ -69,7 +69,7 @@
 </script>
 
 <svelte:head>
-    <title>{CommonHelper.joinNonEmpty([$pageTitle, $appName, "PocketBase"], " - ")}</title>
+    <title>{CommonHelper.joinNonEmpty([$pageTitle, $appName, "GorchitechPbB"], " - ")}</title>
 </svelte:head>
 
 <div class="app-layout">

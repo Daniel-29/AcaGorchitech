@@ -1,13 +1,14 @@
 package pocketbase
 
 import (
+	"log"
 	"os"
 	"os/signal"
 	"path/filepath"
 	"strings"
+	"sync"
 	"syscall"
 
-	"github.com/fatih/color"
 	"github.com/pocketbase/pocketbase/cmd"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/list"
@@ -135,8 +136,8 @@ func NewWithConfig(config *Config) *PocketBase {
 // commands (serve, migrate, version) and executes pb.RootCmd.
 func (pb *PocketBase) Start() error {
 	// register system commands
-	pb.RootCmd.AddCommand(cmd.NewAdminCommand(pb))
 	pb.RootCmd.AddCommand(cmd.NewServeCommand(pb, !pb.hideStartBanner))
+	pb.RootCmd.AddCommand(cmd.NewTempUpgradeCommand(pb))
 
 	return pb.Execute()
 }
@@ -153,33 +154,35 @@ func (pb *PocketBase) Execute() error {
 		}
 	}
 
-	done := make(chan bool, 1)
+	var wg sync.WaitGroup
 
-	// listen for interrupt signal to gracefully shutdown the application
+	wg.Add(1)
+
+	// wait for interrupt signal to gracefully shutdown the application
 	go func() {
-		sigch := make(chan os.Signal, 1)
-		signal.Notify(sigch, os.Interrupt, syscall.SIGTERM)
-		<-sigch
-		done <- true
+		defer wg.Done()
+		quit := make(chan os.Signal, 1) // we need to reserve to buffer size 1, so the notifier are not blocked
+		signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+		<-quit
 	}()
 
 	// execute the root command
 	go func() {
+		defer wg.Done()
 		if err := pb.RootCmd.Execute(); err != nil {
-			// @todo replace with db log once generalized logs are added
-			// (note may need to update the existing commands to not silence errors)
-			color.Red(err.Error())
+			log.Println(err)
 		}
-
-		done <- true
 	}()
 
-	<-done
+	wg.Wait()
 
-	// trigger app cleanups
-	return pb.OnTerminate().Trigger(&core.TerminateEvent{
-		App: pb,
-	})
+	// cleanup
+	return pb.onTerminate()
+}
+
+// onTerminate tries to release the app resources on app termination.
+func (pb *PocketBase) onTerminate() error {
+	return pb.ResetBootstrapState()
 }
 
 // eagerParseFlags parses the global app flags before calling pb.RootCmd.Execute().
@@ -209,7 +212,7 @@ func (pb *PocketBase) eagerParseFlags(config *Config) error {
 	return pb.RootCmd.ParseFlags(os.Args[1:])
 }
 
-// skipBootstrap eagerly checks if the app should skip the bootstrap process:
+// skipBootstrap eagerly checks if the app should skip the bootstap process:
 // - already bootstrapped
 // - is unknown command
 // - is the default help command

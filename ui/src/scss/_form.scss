@@ -15,7 +15,6 @@ button {
     position: relative;
     z-index: 1;
     display: inline-flex;
-    vertical-align: top;
     align-items: center;
     justify-content: center;
     outline: 0;
@@ -239,8 +238,6 @@ button {
         }
     }
     &.btn-xs {
-        padding-left: 7px;
-        padding-right: 7px;
         min-width: var(--xsBtnHeight);
         min-height: var(--xsBtnHeight);
     }
@@ -958,9 +955,8 @@ select {
     &:not(.disabled) .selected-container:hover {
         cursor: pointer;
     }
-    &.readonly,
     &.disabled {
-        color: var(--txtHintColor);
+        color: var(--txtDisabledColor);
         pointer-events: none;
         .txt-placeholder {
             color: inherit;
@@ -981,9 +977,6 @@ select {
                 cursor: inherit;
             }
         }
-    }
-    &.disabled {
-        color: var(--txtDisabledColor);
     }
 
     // dropdown
@@ -1111,13 +1104,6 @@ select {
         transition: background var(--baseAnimationSpeed);
         .list-item {
             border-top: 1px solid var(--baseAlt2Color);
-            &:hover,
-            &:focus,
-            &:focus-within,
-            &:focus-visible,
-            &:active {
-                background: none;
-            }
             &.selected {
                 background: var(--baseAlt2Color);
             }
@@ -1130,13 +1116,6 @@ select {
                     background: var(--baseAlt3Color);
                 }
             }
-            &.dragging {
-                z-index: 9;
-                box-shadow: inset 0 0 0 1px var(--baseAlt3Color);
-            }
-            &.dragover {
-                background: var(--baseAlt2Color);
-            }
         }
     }
     &:focus-within {
@@ -1144,7 +1123,7 @@ select {
             background: var(--baseAlt1Color);
         }
     }
-    &.dragover:not(:has(.dragging)) {
+    &.dragover {
         box-shadow: 0px 0px 0px 2px var(--warningColor);
     }
 }
