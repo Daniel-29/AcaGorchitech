@@ -1,0 +1,63 @@
+<!-- Daily Activity -->
+<mat-card class="w-100">
+  <mat-card-content>
+    <h3 class="mb-56 tittle">Scopes</h3>
+    <mat-card-content>
+
+      <button mat-raised-button color="primary" class="btn-add" (click)="setStep(1)" type="submit">Add</button>
+    </mat-card-content>
+    <mat-tab-group [selectedIndex]="step" mat-stretch-tabs="false" mat-align-tabs="center">
+      <mat-tab label="Scopes" hideToggle="true">
+        <mat-card-content>
+          <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" class="w-100">
+              <!-- Name Column -->
+              <ng-scope matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell class="fw-medium" *matCellDef="let element">
+                  {{ element.name }}
+                </td>
+              </ng-scope>
+      
+              <!-- Description Column -->
+              <ng-scope matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell class="fw-medium" *matCellDef="let element">
+                  <p class="mb-0 fw-medium op-5">{{ element.description }}</p>
+                </td>
+              </ng-scope>
+      
+              <ng-scope matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let element" class="text-nowrap">
+                  <button class="icon-button blue"><mat-icon >update</mat-icon></button>
+                  <button class="icon-button red"><mat-icon >delete</mat-icon></button>
+                </td>
+              </ng-scope>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-tab>
+
+      <mat-tab label="Form">
+        <mat-card-content>
+          <form>
+            <mat-form-field class="w-100 fs-16" appearance="outline">
+              <mat-label>Name</mat-label>
+              <input matInput type="text" placeholder="Enter the Scope Name" />
+            </mat-form-field>
+            <mat-form-field class="w-100 fs-16" appearance="outline">
+              <mat-label>Description</mat-label>
+              <input matInput type="text" placeholder="Enter the Scope description" />
+            </mat-form-field>
+            <button mat-raised-button color="primary" class="btn-form" type="submit">Add</button>
+            <button mat-raised-button color="accent" class="btn-form" (click)="setStep(0)" type="submit">Cancel</button>
+          </form>
+        </mat-card-content>
+      </mat-tab>
+      
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

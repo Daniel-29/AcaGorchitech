@@ -1,0 +1,112 @@
+<!-- Daily Activity -->
+<mat-card class="w-100">
+    <mat-card-content>
+      <h3 class="mb-56 tittle">Networks</h3>
+      <mat-card-content>
+  
+        <button mat-raised-button color="primary" class="btn-add" (click)="setStep(1)" type="submit">Add</button>
+      </mat-card-content>
+      <mat-tab-group [selectedIndex]="step" mat-stretch-tabs="false" mat-align-tabs="center">
+        <mat-tab label="Existing networks" hideToggle="true">
+          <mat-card-content>
+            <div class="table-responsive">
+              <table mat-table [dataSource]="dataSource" class="w-100">
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>Name</th>
+                  <td mat-cell class="fw-medium" *matCellDef="let element">
+                    {{ element.name }}
+                  </td>
+                </ng-container>
+        
+                <!-- Type Column -->
+                <ng-container matColumnDef="label">
+                  <th mat-header-cell *matHeaderCellDef>Label</th>
+                  <td mat-cell class="fw-medium" *matCellDef="let element">
+                    <p class="mb-0 fw-medium op-5">{{ element.label }}</p>
+                  </td>
+                </ng-container>
+        
+                <!-- Source Column -->
+                <ng-container matColumnDef="alias">
+                  <th mat-header-cell *matHeaderCellDef>Alias</th>
+                  <td mat-cell class="fw-medium" *matCellDef="let element">
+                    <p class="mb-0 fw-medium op-5">{{ element.alias }}</p>
+                  </td>
+                </ng-container>
+        
+                <!-- Mount Column -->
+                <ng-container matColumnDef="subnet">
+                  <th mat-header-cell *matHeaderCellDef>Subnet</th>
+                  <td mat-cell class="fw-medium" *matCellDef="let element">
+                    <p class="mb-0 fw-medium op-5">{{ element.subnet }}</p>
+                  </td>
+                </ng-container>
+        
+                <!-- Target Column -->
+                <ng-container matColumnDef="gateway">
+                  <th mat-header-cell *matHeaderCellDef>Gateway</th>
+                  <td mat-cell class="fw-medium" *matCellDef="let element">
+                    <p class="mb-0 fw-medium op-5">{{ element.gateway }}</p>
+                  </td>
+                </ng-container>
+        
+                <!-- Driver Column -->
+                <ng-container matColumnDef="driver">
+                  <th mat-header-cell *matHeaderCellDef>Driver</th>
+                  <td mat-cell class="fw-medium" *matCellDef="let element">
+                    <p class="mb-0 fw-medium op-5">{{ element.driver }}</p>
+                  </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>Action</th>
+                  <td mat-cell *matCellDef="let element" class="text-nowrap">
+                    <button class="icon-button blue"><mat-icon >update</mat-icon></button>
+                    <button class="icon-button red"><mat-icon >delete</mat-icon></button>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+            </div>
+          </mat-card-content>
+        </mat-tab>
+
+        <mat-tab label="New network">
+          <mat-card-content>
+            <form>
+              <mat-form-field class="w-100 fs-16" appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" placeholder="Enter your network name" />
+              </mat-form-field>
+              <mat-form-field class="w-100 fs-16" appearance="outline">
+                <mat-label>Label</mat-label>
+                <input matInput type="text" placeholder="Enter the network label" />
+              </mat-form-field>
+              <mat-form-field class="w-100 fs-16" appearance="outline">
+                <mat-label>Alias</mat-label>
+                <input matInput type="text" placeholder="Enter the network alias" />
+              </mat-form-field>
+              <mat-form-field class="w-100 fs-16" appearance="outline">
+                <mat-label>Subnet</mat-label>
+                <input matInput type="text" placeholder="Enter the subnetwork" />
+              </mat-form-field>
+              <mat-form-field class="w-100 fs-16" appearance="outline">
+                <mat-label>Gateway</mat-label>
+                <input matInput type="text" placeholder="Enter the gateway" />
+              </mat-form-field>
+              <mat-form-field class="w-100 fs-16" appearance="outline">
+                <mat-label>Driver</mat-label>
+                <input matInput type="text" placeholder="Enter driver" />
+              </mat-form-field>
+              <button mat-raised-button color="primary" class="btn-form" type="submit">Add</button>
+              <button mat-raised-button color="accent" class="btn-form" (click)="setStep(0)" type="submit">Cancel</button>
+            </form>
+          </mat-card-content>
+        </mat-tab>
+        
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+  

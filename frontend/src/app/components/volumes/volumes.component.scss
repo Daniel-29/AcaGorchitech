@@ -1,0 +1,64 @@
+.tittle {
+    margin: 0!important;
+  }
+  .table-responsive {
+    overflow-x: auto;
+  
+  }
+  table {
+    margin-top: 25px;
+  }
+  td.mat-cell {
+    padding: 16px;
+  }
+  
+  th.mat-header-cell:first-of-type,
+  td.mat-cell:first-of-type,
+  td.mat-footer-cell:first-of-type {
+    padding: 16px;
+  }
+  
+  th.mat-header-cell {
+    padding: 16px;
+  }
+  
+  .mat-header-cell {
+    font-size: 14px;
+  }
+  .example-headers-align .mat-expansion-panel-header-title,
+  .example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  mat-panel-title,
+  mat-panel-description {
+      font-size: 15px;
+  }
+  .icon-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 0px 7px 0px 7px;
+  }
+  
+  .btn-form {
+    float: right;
+    margin: 0px 7px 0px 7px;
+  }
+  
+  .btn-add {
+    float: right;
+  }
+  
+  .red {
+    color: #e46a76;
+  }
+  
+  .blue {
+    color: #03c9d7;
+  }
