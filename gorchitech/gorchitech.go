@@ -33,7 +33,7 @@ func main() {
 }
 
 func setupHooks(app *pocketbase.PocketBase) {
-	//hooks.SetupOnBeforeServiceHooks(app)
+	hooks.SetupOnBeforeContainerHooks(app)
 	hooks.SetupOnBeforeNetworkHooks(app)
 	hooks.SetupOnBeforeVolumeHooks(app)
 	hooks.SetupOnBeforeImagesHooks(app)
