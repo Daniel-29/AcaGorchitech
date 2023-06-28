@@ -18,7 +18,7 @@ import (
 
 func SetupOnBeforeImagesHooks(app *pocketbase.PocketBase) {
 	onBeforeCreateImage(app)
-	//onBeforeDeleteImage(app)
+	onBeforeDeleteImage(app)
 	onBeforeUpdateImage(app)
 }
 
