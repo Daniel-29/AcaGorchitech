@@ -36,6 +36,7 @@ func setupHooks(app *pocketbase.PocketBase) {
 	//hooks.SetupOnBeforeServiceHooks(app)
 	hooks.SetupOnBeforeNetworkHooks(app)
 	hooks.SetupOnBeforeVolumeHooks(app)
+	hooks.SetupOnBeforeImagesHooks(app)
 }
 
 func getCommit() string {
