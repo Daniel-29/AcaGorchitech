@@ -62,3 +62,9 @@ mat-panel-description {
 .blue {
   color: #03c9d7;
 }
+
+.input-right {
+  direction: rtl;
+  display: flex!important;
+  margin-right: 30px;
+}

@@ -3,61 +3,129 @@
   <mat-card-content>
     <h3 class="mb-56 tittle">Scopes</h3>
     <mat-card-content>
-
-      <button mat-raised-button color="primary" class="btn-add" (click)="setStep(1)" type="submit">Add</button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="btn-add"
+        (click)="setStep(1)"
+        type="submit"
+      >
+        Add new Scope
+      </button>
     </mat-card-content>
-    <mat-tab-group [selectedIndex]="step" mat-stretch-tabs="false" mat-align-tabs="center">
-      <mat-tab label="Scopes" hideToggle="true">
+
+    <mat-tab-group
+      (click)="setStep(step)"
+      (selectedTabChange)="selectedTabValue($event)"
+      [selectedIndex]="step"
+      mat-stretch-tabs="false"
+      mat-align-tabs="center"
+    >
+      <mat-tab label="Existing scopes" hideToggle="true">
         <mat-card-content>
+          <mat-form-field class="w-100 fs-16" appearance="outline">
+            <mat-label>Searcher</mat-label>
+            <input
+              matInput
+              (keyup)="applyFilter($event)"
+              placeholder=""
+              #input
+            />
+          </mat-form-field>
+
           <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" class="w-100">
+            <table
+              mat-table
+              [dataSource]="dataSourceTable"
+              class="w-100"
+              matSort
+            >
               <!-- Name Column -->
-              <ng-scope matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef>Name</th>
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
                 <td mat-cell class="fw-medium" *matCellDef="let element">
                   {{ element.name }}
                 </td>
-              </ng-scope>
-      
+              </ng-container>
+
               <!-- Description Column -->
-              <ng-scope matColumnDef="description">
-                <th mat-header-cell *matHeaderCellDef>Description</th>
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Description
+                </th>
                 <td mat-cell class="fw-medium" *matCellDef="let element">
                   <p class="mb-0 fw-medium op-5">{{ element.description }}</p>
                 </td>
-              </ng-scope>
-      
-              <ng-scope matColumnDef="action">
+              </ng-container>
+
+              <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let element" class="text-nowrap">
-                  <button class="icon-button blue"><mat-icon >update</mat-icon></button>
-                  <button class="icon-button red"><mat-icon >delete</mat-icon></button>
+                  <button
+                    class="icon-button blue"
+                    (click)="updateData(element)"
+                  >
+                    <mat-icon>update</mat-icon>
+                  </button>
+                  <button class="icon-button red" (click)="deleteData(element)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
                 </td>
-              </ng-scope>
+              </ng-container>
+
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
+            <mat-paginator
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page of users"
+            ></mat-paginator>
           </div>
         </mat-card-content>
       </mat-tab>
 
-      <mat-tab label="Form">
+      <mat-tab label="New Scope">
         <mat-card-content>
-          <form>
+          <form [formGroup]="createForm">
             <mat-form-field class="w-100 fs-16" appearance="outline">
               <mat-label>Name</mat-label>
-              <input matInput type="text" placeholder="Enter the Scope Name" />
+              <input
+                matInput
+                type="text"
+                placeholder="Enter the Scope Name"
+                formControlName="name"
+              />
             </mat-form-field>
             <mat-form-field class="w-100 fs-16" appearance="outline">
               <mat-label>Description</mat-label>
-              <input matInput type="text" placeholder="Enter the Scope description" />
+              <input
+                matInput
+                type="text"
+                placeholder="Enter the Scope description"
+                formControlName="description"
+              />
             </mat-form-field>
-            <button mat-raised-button color="primary" class="btn-form" type="submit">Add</button>
-            <button mat-raised-button color="accent" class="btn-form" (click)="setStep(0)" type="submit">Cancel</button>
+            <button
+              mat-raised-button
+              color="primary"
+              class="btn-form"
+              type="submit"
+              (click)="addData()"
+            >
+              Add
+            </button>
+            <button
+              mat-raised-button
+              color="accent"
+              class="btn-form"
+              (click)="setStep(0)"
+              type="submit"
+            >
+              Cancel
+            </button>
           </form>
         </mat-card-content>
       </mat-tab>
-      
     </mat-tab-group>
   </mat-card-content>
 </mat-card>
