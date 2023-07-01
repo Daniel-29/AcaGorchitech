@@ -3,14 +3,42 @@
   <mat-card-content>
     <h3 class="mb-56 tittle">Images</h3>
     <mat-card-content>
-
-      <button mat-raised-button color="primary" class="btn-add" (click)="setStep(1)" type="submit">Add</button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="btn-add"
+        (click)="setStep(1)"
+        type="submit"
+      >
+        Add
+      </button>
     </mat-card-content>
-    <mat-tab-group [selectedIndex]="step" mat-stretch-tabs="false" mat-align-tabs="center">
-      <mat-tab label="Images" hideToggle="true">
-        <mat-card-content>
-          <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" class="w-100">
+
+    <mat-tab-group
+    (click)="setStep(step)"
+      (selectedTabChange)="selectedTabValue($event)"
+      [selectedIndex]="step"
+      mat-stretch-tabs="false"
+      mat-align-tabs="center"
+    >
+    <mat-tab label="Existing images" hideToggle="true">
+      <mat-card-content>
+        <mat-form-field class="w-100 fs-16" appearance="outline">
+          <mat-label>Buscador</mat-label>
+          <input
+          matInput
+          (keyup)="applyFilter($event)"
+          placeholder=""
+          #input
+        />
+        </mat-form-field>
+        <div class="table-responsive">
+          <table
+            mat-table
+            [dataSource]="dataSourceTable"
+            class="w-100"
+            matSort
+          >
               <!-- Name Column -->
               <ng-image matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Name</th>
@@ -46,27 +74,35 @@
               <ng-image matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let element" class="text-nowrap">
-                  <button class="icon-button blue"><mat-icon >update</mat-icon></button>
-                  <button class="icon-button red"><mat-icon >delete</mat-icon></button>
+                  <button class="icon-button blue" (click)="updateData(element)">
+                    <mat-icon>update</mat-icon>
+                  </button>
+                  <button class="icon-button red" (click)="deleteData(element)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
                 </td>
               </ng-image>
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
+            <mat-paginator
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page of users"
+            ></mat-paginator>
           </div>
         </mat-card-content>
       </mat-tab>
 
-      <mat-tab label="Form">
+      <mat-tab label="New image">
         <mat-card-content>
-          <form>
+          <form [formGroup]="createForm">
             <mat-form-field class="w-100 fs-16" appearance="outline">
               <mat-label>Name</mat-label>
-              <input matInput type="text" placeholder="Enter your Name" />
+              <input matInput type="text" placeholder="Enter your Name" formControlName="name"/>
             </mat-form-field>
             <mat-form-field class="w-100 fs-16" appearance="outline">
               <mat-label>Repository</mat-label>
-              <mat-select>
+              <mat-select formControlName="repository">
                 <mat-option *ngFor="let test of tests" [value]="test.value">
                   {{ test.viewValue }}
                 </mat-option>
@@ -74,7 +110,7 @@
             </mat-form-field>
             <mat-form-field class="w-100 fs-16" appearance="outline">
               <mat-label>Tag</mat-label>
-              <mat-select>
+              <mat-select formControlName="tag">
                 <mat-option *ngFor="let test of tests" [value]="test.value">
                   {{ test.viewValue }}
                 </mat-option>
@@ -82,233 +118,29 @@
             </mat-form-field>
             <mat-form-field class="w-100 fs-16" appearance="outline">
               <mat-label>Size</mat-label>
-              <input matInput type="text" placeholder="Enter the Image Size" />
-            </mat-form-field>
-            <button mat-raised-button color="primary" class="btn-form" type="submit">Add</button>
-            <button mat-raised-button color="accent" class="btn-form" (click)="setStep(0)" type="submit">Cancel</button>
-          </form>
-        </mat-card-content>
-      </mat-tab>
-      
-    </mat-tab-group>
-
-    <!-- <mat-accordion>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Form </mat-panel-title>
-        </mat-expansion-panel-header>
-        <form>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Name</mat-label>
-            <input matInput type="text" placeholder="Enter your Name" />
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Scope</mat-label>
-            <mat-select>
-              <mat-option *ngFor="let test of tests" [value]="test.value">
-                {{ test.viewValue }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Image</mat-label>
-            <mat-select>
-              <mat-option *ngFor="let test of tests" [value]="test.value">
-                {{ test.viewValue }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Volumen</mat-label>
-            <mat-select>
-              <mat-option *ngFor="let test of tests" [value]="test.value">
-                {{ test.viewValue }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Network</mat-label>
-            <mat-select>
-              <mat-option *ngFor="let test of tests" [value]="test.value">
-                {{ test.viewValue }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>CPU</mat-label>
-            <input matInput type="text" placeholder="Enter your Name" />
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Memory</mat-label>
-            <input matInput type="text" placeholder="Enter your Name" />
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Storage</mat-label>
-            <input matInput type="text" placeholder="Enter your Name" />
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Label</mat-label>
-            <input matInput type="text" placeholder="Enter your Name" />
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>IP</mat-label>
-            <input matInput type="text" placeholder="Enter your Name" />
-          </mat-form-field>
-          <mat-form-field class="w-100 fs-16" appearance="outline">
-            <mat-label>Port</mat-label>
-            <input matInput type="text" placeholder="Enter your Name" />
-          </mat-form-field>
+              <input matInput type="text" placeholder="Enter the Image Size" formControlName="size"/>
+            </mat-form-field><button
+            mat-raised-button
+            color="primary"
+            class="btn-form"
+            type="submit"
+            (click)="addData()"
+          >
+            Add
+          </button>
+          
         </form>
-        <mat-action-row>
-          <button mat-button color="warn">Previous</button>
-          <button mat-button color="primary">End</button>
-        </mat-action-row>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" class="text-nowrap w-100">
-        <!-- Name Column -->
-        <!-- <ng-image matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            {{ element.name }}
-          </td>
-        </ng-image> -->
-
-        <!-- Scope Column -->
-        <!-- <ng-image matColumnDef="scope">
-          <th mat-header-cell *matHeaderCellDef>Scope</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.scope }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Image Column -->
-        <!-- <ng-image matColumnDef="image">
-          <th mat-header-cell *matHeaderCellDef>Image</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.image }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Volumen Column -->
-        <!-- <ng-image matColumnDef="volumen">
-          <th mat-header-cell *matHeaderCellDef>Volumen</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.volumen }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Network Column -->
-        <!-- <ng-image matColumnDef="network">
-          <th mat-header-cell *matHeaderCellDef>Network</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.network }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- CPU Column -->
-        <!-- <ng-image matColumnDef="cpu">
-          <th mat-header-cell *matHeaderCellDef>CPU</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.cpu }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Memory Column -->
-        <!-- <ng-image matColumnDef="memory">
-          <th mat-header-cell *matHeaderCellDef>Memory</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.memory }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Storage Column -->
-        <!-- <ng-image matColumnDef="storage">
-          <th mat-header-cell *matHeaderCellDef>Storage</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.storage }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Label Column -->
-        <!-- <ng-image matColumnDef="label">
-          <th mat-header-cell *matHeaderCellDef>Label</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.label }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- IP Column -->
-        <!-- <ng-image matColumnDef="ip">
-          <th mat-header-cell *matHeaderCellDef>IP</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.ip }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Port Column -->
-        <!-- <ng-image matColumnDef="port">
-          <th mat-header-cell *matHeaderCellDef>Port</th>
-          <td mat-cell class="fw-medium" *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.port }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Status Column -->
-        <!-- <ng-image matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let element">
-            <span class="badge badge-info rounded-pill">{{
-              element.status
-            }}</span>
-          </td>
-        </ng-image> -->
-
-        <!-- Assigned Column -->
-        <!-- <ng-image matColumnDef="assigned">
-          <th mat-header-cell *matHeaderCellDef>Assigned</th>
-          <td mat-cell *matCellDef="let element">
-            <p class="mb-0 fw-medium">{{ element.name }}</p>
-            <p class="mb-0 fw-normal op-5">{{ element.scope }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Project Column -->
-        <!-- <ng-image matColumnDef="name2">
-          <th mat-header-cell *matHeaderCellDef>Project</th>
-          <td mat-cell *matCellDef="let element">
-            <p class="mb-0 fw-medium op-5">{{ element.project }}</p>
-          </td>
-        </ng-image> -->
-
-        <!-- Priority Column -->
-        <!-- <ng-image matColumnDef="priority">
-          <th mat-header-cell *matHeaderCellDef>Priority</th>
-          <td mat-cell *matCellDef="let element">
-            <span class="badge {{ element.badge }} rounded-pill">{{
-              element.priority
-            }}</span>
-          </td>
-        </ng-image> -->
-
-        <!-- Budget Column -->
-        <!-- <ng-image matColumnDef="budget">
-          <th mat-header-cell *matHeaderCellDef>Budget</th>
-          <td mat-cell *matCellDef="let element">
-            <p class="mb-0 fw-medium">{{ element.budget }}</p>
-          </td>
-        </ng-image>
-        <ng-image matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>Action</th>
-          <td mat-cell *matCellDef="let element">
-            <button class="icon-button"><mat-icon >update</mat-icon></button>
-            <button class="icon-button"><mat-icon >delete</mat-icon></button>
-          </td>
-        </ng-image>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-    </div> -->
-  </mat-card-content>
+        <button
+            mat-raised-button
+            color="accent"
+            class="btn-form"
+            (click)="setStep(0)"
+            type="submit"
+          >
+            Cancel
+          </button>
+      </mat-card-content>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card-content>
 </mat-card>

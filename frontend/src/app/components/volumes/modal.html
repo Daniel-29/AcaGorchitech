@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>Update Volume</h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="updateForm">
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Name</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter your volume name"
+        formControlName="name"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Type</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the volume type"
+        formControlName="type"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Source</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the volume source"
+        formControlName="source"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Mount</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the volume mount"
+        formControlName="mount"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Target</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the volume target"
+        formControlName="target"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Driver</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter driver"
+        formControlName="driver"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Label</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the volume label"
+        formControlName="label"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Size</mat-label>
+      <input matInput type="number" formControlName="size" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="submitForm()" cdkFocusInitial>Update</button>
+</mat-dialog-actions>

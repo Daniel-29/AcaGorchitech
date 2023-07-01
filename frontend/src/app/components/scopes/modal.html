@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Update Scope</h2>
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="updateForm">
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Name</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Edit the Scope Name"
+        formControlName="name"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Description</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Edit the Scope description"
+        formControlName="description"
+      />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="submitForm()" cdkFocusInitial>Update</button>
+</mat-dialog-actions>

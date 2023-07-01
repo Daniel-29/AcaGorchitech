@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 interface sidebarMenu {
   link: string;
@@ -24,7 +25,12 @@ export class FullComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) { }
+  constructor(private breakpointObserver: BreakpointObserver, private router: Router) { }
+
+  onLogout():void {
+    localStorage.removeItem("token")
+    this.router.navigate(["/login"]);
+  }
 
   routerActive: string = "activelink";
 
@@ -32,88 +38,39 @@ export class FullComponent {
     {
       link: "/home",
       icon: "home",
-      menu: "Dashboard",
+      menu: "Home",
     },
     {
-      link: "/button",
-      icon: "disc",
-      menu: "Buttons",
+      link: "/containers",
+      icon: "box",
+      menu: "Containers",
     },
     {
-      link: "/forms",
-      icon: "layout",
-      menu: "Forms",
+      link: "/images",
+      icon: "server",
+      menu: "Images",
     },
     {
-      link: "/alerts",
-      icon: "info",
-      menu: "Alerts",
+      link: "/networks",
+      icon: "share-2",
+      menu: "Networks",
     },
     {
-      link: "/grid-list",
+      link: "/scopes",
       icon: "file-text",
-      menu: "Grid List",
+      menu: "Scopes",
     },
     {
-      link: "/menu",
-      icon: "menu",
-      menu: "Menus",
+      link: "/volumes",
+      icon: "database",
+      menu: "Volumes",
     },
     {
-      link: "/table",
-      icon: "grid",
-      menu: "Tables",
+      link: "/users",
+      icon: "user",
+      menu: "Users",
     },
-    {
-      link: "/expansion",
-      icon: "divide-circle",
-      menu: "Expansion Panel",
-    },
-    {
-      link: "/chips",
-      icon: "award",
-      menu: "Chips",
-    },
-    {
-      link: "/tabs",
-      icon: "list",
-      menu: "Tabs",
-    },
-    {
-      link: "/progress",
-      icon: "bar-chart-2",
-      menu: "Progress Bar",
-    },
-    {
-      link: "/toolbar",
-      icon: "voicemail",
-      menu: "Toolbar",
-    },
-    {
-      link: "/progress-snipper",
-      icon: "loader",
-      menu: "Progress Snipper",
-    },
-    {
-      link: "/tooltip",
-      icon: "bell",
-      menu: "Tooltip",
-    },
-    {
-      link: "/snackbar",
-      icon: "slack",
-      menu: "Snackbar",
-    },
-    {
-      link: "/slider",
-      icon: "sliders",
-      menu: "Slider",
-    },
-    {
-      link: "/slide-toggle",
-      icon: "layers",
-      menu: "Slide Toggle",
-    },
+   
   ]
 
 }

@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>Install Angular</h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="updateForm">
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>User</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter your user"
+        formControlName="user"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Name</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the user name"
+        formControlName="name"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the user password"
+        formControlName="password"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the user email"
+        formControlName="email"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Role</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the user role"
+        formControlName="roleId"
+      />
+    </mat-form-field>
+    <!-- <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Gateway</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter the gateway"
+        formControlName="gateway"
+      />
+    </mat-form-field>
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+      <mat-label>Driver</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Enter driver"
+        formControlName="driver"
+      />
+    </mat-form-field> -->
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="submitForm()" cdkFocusInitial>Update</button>
+</mat-dialog-actions>
+
+<!-- Copyright 2023 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at https://angular.io/license -->

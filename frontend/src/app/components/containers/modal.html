@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>Modificar</h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="updateForm">
+    <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Name</mat-label>
+    <input matInput type="text" placeholder="Enter your Name" formControlName="name" />
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Scope</mat-label>
+    <mat-select formControlName="id_scope">
+      <mat-option *ngFor="let data of scopesData" [value]="data.id">
+        {{ data.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Image</mat-label>
+    <mat-select formControlName="id_image">
+      <mat-option *ngFor="let data of imagesData" [value]="data.id">
+        {{ data.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Volumen</mat-label>
+    <mat-select formControlName="id_volumen">
+      <mat-option *ngFor="let data of volumesData" [value]="data.id">
+        {{ data.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Network</mat-label>
+    <mat-select formControlName="id_network">
+      <mat-option *ngFor="let data of networksData" [value]="data.id">
+        {{ data.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>CPU</mat-label>
+    <input matInput type="text" placeholder="Enter your Name" formControlName="cpu" />
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Memory</mat-label>
+    <input matInput type="text" placeholder="Enter your Name" formControlName="memory" />
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Storage</mat-label>
+    <input matInput type="text" placeholder="Enter your Name" formControlName="storage" />
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Label</mat-label>
+    <input matInput type="text" placeholder="Enter your Name" formControlName="label" />
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>IP</mat-label>
+    <input matInput type="text" placeholder="Enter your Name" formControlName="ip" />
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Port</mat-label>
+    <input matInput type="text" placeholder="Enter your Name" formControlName="port" />
+  </mat-form-field>
+  <mat-form-field class="w-100 fs-16" appearance="outline">
+    <mat-label>Status</mat-label>
+    <input matInput type="text" placeholder="Enter your Name" formControlName="status" />
+  </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="submitForm()" cdkFocusInitial>Update</button>
+</mat-dialog-actions>
