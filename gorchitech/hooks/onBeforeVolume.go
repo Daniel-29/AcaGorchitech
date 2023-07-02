@@ -129,7 +129,7 @@ func onBeforeUpdateVolume(app *pocketbase.PocketBase) {
 
 		log.Println("on  Create network Labels", gVolumen.Label)
 		LabelsString := strings.Split(gVolumen.Label, ",")
-		l	og.Println("on  Create network Labels", LabelsString)
+		log.Println("on  Create network Labels", LabelsString)
 		Labels := make(map[string]string)
 
 		for i, label := range LabelsString {
