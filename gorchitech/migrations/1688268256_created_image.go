@@ -12,32 +12,19 @@ import (
 func init() {
 	m.Register(func(db dbx.Builder) error {
 		jsonData := `{
-			"id": "yepazfdcyl39t7n",
-			"created": "2023-05-08 03:13:30.453Z",
-			"updated": "2023-05-08 03:13:30.453Z",
-			"name": "network",
+			"id": "0crqzq20h6c0rze",
+			"created": "2023-07-02 03:24:15.988Z",
+			"updated": "2023-07-02 03:24:15.988Z",
+			"name": "image",
 			"type": "base",
 			"system": false,
 			"schema": [
 				{
 					"system": false,
-					"id": "cnworogq",
+					"id": "i2lif4no",
 					"name": "name",
 					"type": "text",
-					"required": true,
-					"unique": false,
-					"options": {
-						"min": 5,
-						"max": 25,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "jy2zmviy",
-					"name": "label",
-					"type": "text",
-					"required": true,
+					"required": false,
 					"unique": false,
 					"options": {
 						"min": null,
@@ -47,8 +34,8 @@ func init() {
 				},
 				{
 					"system": false,
-					"id": "gj40tmmq",
-					"name": "alias",
+					"id": "dnmc9cuj",
+					"name": "size",
 					"type": "text",
 					"required": false,
 					"unique": false,
@@ -60,59 +47,19 @@ func init() {
 				},
 				{
 					"system": false,
-					"id": "z02mg83j",
-					"name": "subnet",
-					"type": "text",
+					"id": "nqafwlo9",
+					"name": "date",
+					"type": "date",
 					"required": false,
 					"unique": false,
 					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
+						"min": "",
+						"max": ""
 					}
 				},
 				{
 					"system": false,
-					"id": "dkgt2o6w",
-					"name": "gateway",
-					"type": "text",
-					"required": false,
-					"unique": false,
-					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "sk2ydgg1",
-					"name": "driver",
-					"type": "text",
-					"required": false,
-					"unique": false,
-					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "7kp2f9zf",
-					"name": "networkId",
-					"type": "text",
-					"required": false,
-					"unique": false,
-					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "7k12ngwt",
+					"id": "8nedqyny",
 					"name": "deleted",
 					"type": "date",
 					"required": false,
@@ -121,10 +68,23 @@ func init() {
 						"min": "",
 						"max": ""
 					}
+				},
+				{
+					"system": false,
+					"id": "y97qvirv",
+					"name": "imageId",
+					"type": "text",
+					"required": false,
+					"unique": false,
+					"options": {
+						"min": null,
+						"max": null,
+						"pattern": ""
+					}
 				}
 			],
 			"indexes": [
-				"CREATE INDEX ` + "`" + `idx_544Knld` + "`" + ` ON ` + "`" + `network` + "`" + ` (` + "`" + `networkId` + "`" + `)"
+				"CREATE INDEX ` + "`" + `idx_QxCrCrg` + "`" + ` ON ` + "`" + `image` + "`" + ` (` + "`" + `imageId` + "`" + `)"
 			],
 			"listRule": null,
 			"viewRule": null,
@@ -143,7 +103,7 @@ func init() {
 	}, func(db dbx.Builder) error {
 		dao := daos.New(db);
 
-		collection, err := dao.FindCollectionByNameOrId("yepazfdcyl39t7n")
+		collection, err := dao.FindCollectionByNameOrId("0crqzq20h6c0rze")
 		if err != nil {
 			return err
 		}

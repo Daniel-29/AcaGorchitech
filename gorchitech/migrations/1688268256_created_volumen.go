@@ -12,16 +12,16 @@ import (
 func init() {
 	m.Register(func(db dbx.Builder) error {
 		jsonData := `{
-			"id": "kxyhj0q39kzj572",
-			"created": "2023-05-08 03:13:30.454Z",
-			"updated": "2023-05-08 03:13:30.454Z",
-			"name": "scope",
+			"id": "eyd2u1v1hmjrr4x",
+			"created": "2023-07-02 03:24:15.989Z",
+			"updated": "2023-07-02 03:24:15.989Z",
+			"name": "volumen",
 			"type": "base",
 			"system": false,
 			"schema": [
 				{
 					"system": false,
-					"id": "x8s4izdi",
+					"id": "4yapglcb",
 					"name": "name",
 					"type": "text",
 					"required": false,
@@ -34,8 +34,8 @@ func init() {
 				},
 				{
 					"system": false,
-					"id": "isgm9yku",
-					"name": "description",
+					"id": "vntrdcsh",
+					"name": "mount",
 					"type": "text",
 					"required": false,
 					"unique": false,
@@ -47,7 +47,33 @@ func init() {
 				},
 				{
 					"system": false,
-					"id": "zntbqx7h",
+					"id": "uzqvtfog",
+					"name": "label",
+					"type": "text",
+					"required": false,
+					"unique": false,
+					"options": {
+						"min": null,
+						"max": null,
+						"pattern": ""
+					}
+				},
+				{
+					"system": false,
+					"id": "wrukg8gq",
+					"name": "volumenId",
+					"type": "text",
+					"required": false,
+					"unique": false,
+					"options": {
+						"min": null,
+						"max": null,
+						"pattern": ""
+					}
+				},
+				{
+					"system": false,
+					"id": "oifucmwg",
 					"name": "deleted",
 					"type": "date",
 					"required": false,
@@ -56,9 +82,26 @@ func init() {
 						"min": "",
 						"max": ""
 					}
+				},
+				{
+					"system": false,
+					"id": "v0vnqyvw",
+					"name": "driver",
+					"type": "select",
+					"required": false,
+					"unique": false,
+					"options": {
+						"maxSelect": 1,
+						"values": [
+							"local",
+							"nfs"
+						]
+					}
 				}
 			],
-			"indexes": [],
+			"indexes": [
+				"CREATE INDEX ` + "`" + `idx_SjmddmC` + "`" + ` ON ` + "`" + `volumen` + "`" + ` (` + "`" + `volumenId` + "`" + `)"
+			],
 			"listRule": null,
 			"viewRule": null,
 			"createRule": null,
@@ -76,7 +119,7 @@ func init() {
 	}, func(db dbx.Builder) error {
 		dao := daos.New(db);
 
-		collection, err := dao.FindCollectionByNameOrId("kxyhj0q39kzj572")
+		collection, err := dao.FindCollectionByNameOrId("eyd2u1v1hmjrr4x")
 		if err != nil {
 			return err
 		}

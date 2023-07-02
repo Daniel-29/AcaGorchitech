@@ -11,20 +11,42 @@ import (
 
 func init() {
 	m.Register(func(db dbx.Builder) error {
+		dao := daos.New(db);
+
+		collection, err := dao.FindCollectionByNameOrId("yepazfdcyl39t7n")
+		if err != nil {
+			return err
+		}
+
+		return dao.DeleteCollection(collection)
+	}, func(db dbx.Builder) error {
 		jsonData := `{
-			"id": "0crqzq20h6c0rze",
-			"created": "2023-05-08 03:13:30.454Z",
-			"updated": "2023-05-08 03:13:30.454Z",
-			"name": "image",
+			"id": "yepazfdcyl39t7n",
+			"created": "2023-05-08 03:13:30.453Z",
+			"updated": "2023-07-02 03:21:30.624Z",
+			"name": "network",
 			"type": "base",
 			"system": false,
 			"schema": [
 				{
 					"system": false,
-					"id": "i2lif4no",
+					"id": "cnworogq",
 					"name": "name",
 					"type": "text",
-					"required": false,
+					"required": true,
+					"unique": false,
+					"options": {
+						"min": 5,
+						"max": 25,
+						"pattern": ""
+					}
+				},
+				{
+					"system": false,
+					"id": "jy2zmviy",
+					"name": "label",
+					"type": "text",
+					"required": true,
 					"unique": false,
 					"options": {
 						"min": null,
@@ -34,8 +56,8 @@ func init() {
 				},
 				{
 					"system": false,
-					"id": "juum6dea",
-					"name": "label",
+					"id": "gj40tmmq",
+					"name": "alias",
 					"type": "text",
 					"required": false,
 					"unique": false,
@@ -47,31 +69,46 @@ func init() {
 				},
 				{
 					"system": false,
-					"id": "gw1renbo",
-					"name": "size",
-					"type": "number",
+					"id": "z02mg83j",
+					"name": "subnet",
+					"type": "text",
 					"required": false,
 					"unique": false,
 					"options": {
 						"min": null,
-						"max": null
+						"max": null,
+						"pattern": ""
 					}
 				},
 				{
 					"system": false,
-					"id": "nqafwlo9",
-					"name": "date",
-					"type": "date",
+					"id": "dkgt2o6w",
+					"name": "gateway",
+					"type": "text",
 					"required": false,
 					"unique": false,
 					"options": {
-						"min": "",
-						"max": ""
+						"min": null,
+						"max": null,
+						"pattern": ""
 					}
 				},
 				{
 					"system": false,
-					"id": "8nedqyny",
+					"id": "7kp2f9zf",
+					"name": "networkId",
+					"type": "text",
+					"required": false,
+					"unique": false,
+					"options": {
+						"min": null,
+						"max": null,
+						"pattern": ""
+					}
+				},
+				{
+					"system": false,
+					"id": "7k12ngwt",
 					"name": "deleted",
 					"type": "date",
 					"required": false,
@@ -83,33 +120,25 @@ func init() {
 				},
 				{
 					"system": false,
-					"id": "y97qvirv",
-					"name": "imageId",
-					"type": "text",
+					"id": "8qsnnxob",
+					"name": "driver",
+					"type": "select",
 					"required": false,
 					"unique": false,
 					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "goyxgdve",
-					"name": "repository",
-					"type": "text",
-					"required": false,
-					"unique": false,
-					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
+						"maxSelect": 1,
+						"values": [
+							"bridge",
+							"host",
+							"overlay",
+							"macvlan",
+							"ipvlan"
+						]
 					}
 				}
 			],
 			"indexes": [
-				"CREATE INDEX ` + "`" + `idx_QxCrCrg` + "`" + ` ON ` + "`" + `image` + "`" + ` (` + "`" + `imageId` + "`" + `)"
+				"CREATE INDEX ` + "`" + `idx_544Knld` + "`" + ` ON ` + "`" + `network` + "`" + ` (` + "`" + `networkId` + "`" + `)"
 			],
 			"listRule": null,
 			"viewRule": null,
@@ -125,14 +154,5 @@ func init() {
 		}
 
 		return daos.New(db).SaveCollection(collection)
-	}, func(db dbx.Builder) error {
-		dao := daos.New(db);
-
-		collection, err := dao.FindCollectionByNameOrId("0crqzq20h6c0rze")
-		if err != nil {
-			return err
-		}
-
-		return dao.DeleteCollection(collection)
 	})
 }
