@@ -135,6 +135,18 @@ func onBeforeUpdateContainer(app *pocketbase.PocketBase) {
 		}
 		defer cli.Close()
 
+		if gcontainer.Deleted != "" {
+
+			if err := cli.ContainerRemove(context.Background(), gcontainer.ContainerId, typesDocker.ContainerRemoveOptions{
+				RemoveVolumes: true, // Set to true if you want to remove the associated volumes as well
+				Force:         true, // Set to true if you want to force the removal of a running container
+			}); err != nil {
+				panic(err)
+			}
+
+			return nil
+		}
+
 		onStateContainer(cli, context.Background(), gcontainer.ContainerId, gcontainer.Status, true)
 		ports, ip := onGetPortIpContainer(cli, context.Background(), gcontainer.ContainerId, gcontainer.Network.GetString("name"))
 		log.Println("on  onGetPortIpContainer", ports, ip)

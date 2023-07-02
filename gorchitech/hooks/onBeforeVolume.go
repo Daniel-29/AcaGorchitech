@@ -108,6 +108,20 @@ func onBeforeUpdateVolume(app *pocketbase.PocketBase) {
 		}
 		defer cli.Close()
 
+		if gVolumen.Deleted != "" {
+			// Delete the volume
+			err = cli.VolumeRemove(context.Background(), gVolumen.VolumenId, false)
+			if err != nil {
+				panic(err)
+			}
+			return nil
+		}
+
+		err = cli.VolumeRemove(context.Background(), gVolumen.VolumenId, false)
+		if err != nil {
+			panic(err)
+		}
+
 		err = cli.VolumeRemove(context.Background(), gVolumen.VolumenId, false)
 		if err != nil {
 			panic(err)
