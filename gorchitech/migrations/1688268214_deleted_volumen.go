@@ -11,6 +11,15 @@ import (
 
 func init() {
 	m.Register(func(db dbx.Builder) error {
+		dao := daos.New(db);
+
+		collection, err := dao.FindCollectionByNameOrId("eyd2u1v1hmjrr4x")
+		if err != nil {
+			return err
+		}
+
+		return dao.DeleteCollection(collection)
+	}, func(db dbx.Builder) error {
 		jsonData := `{
 			"id": "eyd2u1v1hmjrr4x",
 			"created": "2023-05-08 03:13:30.454Z",
@@ -165,14 +174,5 @@ func init() {
 		}
 
 		return daos.New(db).SaveCollection(collection)
-	}, func(db dbx.Builder) error {
-		dao := daos.New(db);
-
-		collection, err := dao.FindCollectionByNameOrId("eyd2u1v1hmjrr4x")
-		if err != nil {
-			return err
-		}
-
-		return dao.DeleteCollection(collection)
 	})
 }

@@ -11,10 +11,19 @@ import (
 
 func init() {
 	m.Register(func(db dbx.Builder) error {
+		dao := daos.New(db);
+
+		collection, err := dao.FindCollectionByNameOrId("lqgwrlzc9viduru")
+		if err != nil {
+			return err
+		}
+
+		return dao.DeleteCollection(collection)
+	}, func(db dbx.Builder) error {
 		jsonData := `{
 			"id": "lqgwrlzc9viduru",
 			"created": "2023-05-08 03:13:30.454Z",
-			"updated": "2023-05-08 03:13:30.454Z",
+			"updated": "2023-07-02 03:21:30.664Z",
 			"name": "container",
 			"type": "base",
 			"system": false,
@@ -23,58 +32,6 @@ func init() {
 					"system": false,
 					"id": "zqlqyxkf",
 					"name": "name",
-					"type": "text",
-					"required": false,
-					"unique": false,
-					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "5x4ltush",
-					"name": "cpu",
-					"type": "text",
-					"required": false,
-					"unique": false,
-					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "k4gm8slo",
-					"name": "memory",
-					"type": "text",
-					"required": false,
-					"unique": false,
-					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "vbhtyvwq",
-					"name": "storage",
-					"type": "text",
-					"required": false,
-					"unique": false,
-					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "fl6ljxuq",
-					"name": "label",
 					"type": "text",
 					"required": false,
 					"unique": false,
@@ -101,19 +58,6 @@ func init() {
 					"system": false,
 					"id": "fpw3ddpt",
 					"name": "port",
-					"type": "text",
-					"required": false,
-					"unique": false,
-					"options": {
-						"min": null,
-						"max": null,
-						"pattern": ""
-					}
-				},
-				{
-					"system": false,
-					"id": "bgpz3n1z",
-					"name": "status",
 					"type": "text",
 					"required": false,
 					"unique": false,
@@ -153,7 +97,7 @@ func init() {
 					"id": "asxnxvat",
 					"name": "id_scope",
 					"type": "relation",
-					"required": false,
+					"required": true,
 					"unique": false,
 					"options": {
 						"collectionId": "kxyhj0q39kzj572",
@@ -168,7 +112,7 @@ func init() {
 					"id": "ftmnydik",
 					"name": "id_image",
 					"type": "relation",
-					"required": false,
+					"required": true,
 					"unique": false,
 					"options": {
 						"collectionId": "0crqzq20h6c0rze",
@@ -198,7 +142,7 @@ func init() {
 					"id": "erflaqkl",
 					"name": "id_network",
 					"type": "relation",
-					"required": false,
+					"required": true,
 					"unique": false,
 					"options": {
 						"collectionId": "yepazfdcyl39t7n",
@@ -206,6 +150,86 @@ func init() {
 						"minSelect": null,
 						"maxSelect": 1,
 						"displayFields": []
+					}
+				},
+				{
+					"system": false,
+					"id": "l7wfpcis",
+					"name": "status",
+					"type": "select",
+					"required": false,
+					"unique": false,
+					"options": {
+						"maxSelect": 1,
+						"values": [
+							"runnig",
+							"stoped",
+							"deleted",
+							"restarts"
+						]
+					}
+				},
+				{
+					"system": false,
+					"id": "jkag8ezx",
+					"name": "label",
+					"type": "text",
+					"required": false,
+					"unique": false,
+					"options": {
+						"min": null,
+						"max": null,
+						"pattern": ""
+					}
+				},
+				{
+					"system": false,
+					"id": "cdoj1rwu",
+					"name": "memory",
+					"type": "number",
+					"required": true,
+					"unique": false,
+					"options": {
+						"min": 125,
+						"max": 1024
+					}
+				},
+				{
+					"system": false,
+					"id": "qkpqwnl3",
+					"name": "cpu",
+					"type": "number",
+					"required": true,
+					"unique": false,
+					"options": {
+						"min": 1,
+						"max": 9
+					}
+				},
+				{
+					"system": false,
+					"id": "yf3wqtjg",
+					"name": "environment",
+					"type": "text",
+					"required": false,
+					"unique": false,
+					"options": {
+						"min": null,
+						"max": null,
+						"pattern": ""
+					}
+				},
+				{
+					"system": false,
+					"id": "a9uud874",
+					"name": "command",
+					"type": "text",
+					"required": false,
+					"unique": false,
+					"options": {
+						"min": null,
+						"max": null,
+						"pattern": ""
 					}
 				}
 			],
@@ -226,14 +250,5 @@ func init() {
 		}
 
 		return daos.New(db).SaveCollection(collection)
-	}, func(db dbx.Builder) error {
-		dao := daos.New(db);
-
-		collection, err := dao.FindCollectionByNameOrId("lqgwrlzc9viduru")
-		if err != nil {
-			return err
-		}
-
-		return dao.DeleteCollection(collection)
 	})
 }
