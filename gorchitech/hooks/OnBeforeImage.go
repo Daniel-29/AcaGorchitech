@@ -124,11 +124,15 @@ func onBeforeUpdateImage(app *pocketbase.PocketBase) {
 		}
 		defer cli.Close()
 
-		log.Println("on  Remove image")
-		rsp, err := cli.ImageRemove(context.Background(), gimage.ImageID, typesDocker.ImageRemoveOptions{
-			Force:         false, // Force removal even if the image is in use by containers
-			PruneChildren: false, // Remove all images dependent on the specified image
-		})
+		if gVolumen.Deleted != "" {
+			log.Println("on  Remove image")
+			rsp, err := cli.ImageRemove(context.Background(), gimage.ImageID, typesDocker.ImageRemoveOptions{
+				Force:         false, // Force removal even if the image is in use by containers
+				PruneChildren: false, // Remove all images dependent on the specified image
+			})
+			return nil
+		}
+
 		if err != nil {
 			return err
 		}
