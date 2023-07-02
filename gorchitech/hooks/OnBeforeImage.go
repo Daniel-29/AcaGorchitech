@@ -36,6 +36,19 @@ func onBeforeCreateImage(app *pocketbase.PocketBase) {
 		}
 		defer cli.Close()
 
+		if gimage.Deleted != "" {
+			// Remove the image
+			rsp, err := cli.ImageRemove(context.Background(), gimage.ImageID, typesDocker.ImageRemoveOptions{
+				Force:         false, // Force removal even if the image is in use by containers
+				PruneChildren: false, // Remove all images dependent on the specified image
+			})
+			if err != nil {
+				return err
+			}
+			log.Println("on  Remove image", rsp)
+			return nil
+		}
+
 		reader, err := cli.ImagePull(ctx, gimage.Name, typesDocker.ImagePullOptions{})
 		if err != nil {
 			panic(err)
