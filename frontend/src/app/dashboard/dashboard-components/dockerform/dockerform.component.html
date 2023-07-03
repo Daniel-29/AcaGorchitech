@@ -1,0 +1,15 @@
+<form *ngIf="onFormCreated" class="form" [formGroup]="formulario" (ngSubmit)="onSubmit()">
+  <ul class="wrapper">
+    <li *ngFor="let item of InputForms; index as i" [style.--i]="(InputForms?.length||0)- i+1">
+      <input
+        class="input"
+        type="text"
+        placeholder="{{ item.placeholder }}"
+        required=""
+        name="{{ item.name }}"
+        formControlName="{{ item.name }}"
+      />
+    </li>
+    <button type="submit" style="--i: 1">{{buttonName}}</button>
+  </ul>
+</form>

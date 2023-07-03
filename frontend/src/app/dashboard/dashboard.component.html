@@ -1,16 +1,86 @@
 <!-- <app-sales></app-sales> -->
 
-
 <div>
   <div fxLayout="row wrap" fxLayoutGap="30px grid">
     <div fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fxFlex.sm="100%">
-      <!-- <app-activity></app-activity> -->
+      <!-- pass @input into dockerforn -->
+      <app-dockerform
+        [InputForms]="formPostgres"
+        buttonName="Container Postgres"
+        (formEnJson)="handleformPostgres($event)"
+      ></app-dockerform>
     </div>
-    <div fxFlex.md="66%" class="overflow-x-hidden" fxFlex.lg="66%" fxFlex.xl="66%" fxFlex.sm="100%">
-      <!-- <app-product></app-product> -->
+    <div
+      fxFlex.md="66%"
+      class="overflow-x-hidden"
+      fxFlex.lg="66%"
+      fxFlex.xl="66%"
+      fxFlex.sm="100%"
+    >
+      <app-containerlist title="Instancias de Postgres" [list]="postgresList">
+      </app-containerlist>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutGap="30px grid">
+    <div fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fxFlex.sm="100%">
+      <!-- pass @input into dockerforn -->
+      <app-dockerform
+        [InputForms]="formMysqld"
+        buttonName="Container Mysql"
+        (formEnJson)="handleformMysqld($event)"
+      ></app-dockerform>
+    </div>
+    <div
+      fxFlex.md="66%"
+      class="overflow-x-hidden"
+      fxFlex.lg="66%"
+      fxFlex.xl="66%"
+      fxFlex.sm="100%"
+    >
+      <app-containerlist title="Instancias de Mysql" [list]="mysqlList">
+      </app-containerlist>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutGap="30px grid">
+    <div fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fxFlex.sm="100%">
+      <!-- pass @input into dockerforn -->
+      <app-dockerform
+        [InputForms]="formMariadbd"
+        buttonName="Container Mariadb"
+        (formEnJson)="handleformMariadbd($event)"
+      ></app-dockerform>
+    </div>
+    <div
+      fxFlex.md="66%"
+      class="overflow-x-hidden"
+      fxFlex.lg="66%"
+      fxFlex.xl="66%"
+      fxFlex.sm="100%"
+    >
+      <app-containerlist title="Instancias de Mariadb" [list]="mariadbList">
+      </app-containerlist>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutGap="30px grid">
+    <div fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fxFlex.sm="100%">
+      <!-- pass @input into dockerforn -->
+      <app-dockerform
+        [InputForms]="formWORDPRESS"
+        buttonName="Container WORDPRESS"
+        (formEnJson)="handleformWORDPRESS($event)"
+      ></app-dockerform>
+    </div>
+    <div
+      fxFlex.md="66%"
+      class="overflow-x-hidden"
+      fxFlex.lg="66%"
+      fxFlex.xl="66%"
+      fxFlex.sm="100%"
+    >
+      <app-containerlist title="Instancias de WORDPRESS" [list]="wordpressList">
+      </app-containerlist>
     </div>
   </div>
 </div>
-
 
 <!-- <app-cards></app-cards> -->
