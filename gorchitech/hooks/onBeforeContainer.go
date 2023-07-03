@@ -52,6 +52,27 @@ func onBeforeCreateContainer(app *pocketbase.PocketBase) {
 		CommandStrings := strings.Split(gcontainer.Command, ",")
 
 		log.Println("on  Create Container CommandStrings", CommandStrings)
+		bindings := nat.PortMap{}
+
+		if gcontainer.Port != "" {
+			PortsStrings := strings.Split(gcontainer.Port, ":")
+
+			log.Println("on  Create Container PortsStrings", PortsStrings)
+
+			PortsProtocolStrings := strings.Split(PortsStrings[1], "/")
+
+			log.Println("on  Create Container PortsStrings", PortsStrings)
+
+			port, err := nat.NewPort(PortsProtocolStrings[1], PortsProtocolStrings[0])
+			if err != nil {
+				panic(err)
+			}
+
+			bindings = nat.PortMap{
+				port: []nat.PortBinding{{HostPort: PortsStrings[0]}},
+			}
+			log.Println("on  Create Container bindings", bindings)
+		}
 
 		configContainer := &container.Config{
 			Labels: Labels,
@@ -60,15 +81,28 @@ func onBeforeCreateContainer(app *pocketbase.PocketBase) {
 			Cmd:    CommandStrings,
 		}
 
+		if gcontainer.Volumen != nil {
+			log.Println("on  Create Container Volumen", gcontainer.Volumen)
+			volumes := make(map[string]struct{})
+			volumePaths := strings.Split(gcontainer.Volumen.GetString("mount"), ",")
+			for _, path := range volumePaths {
+				volumes[path] = struct{}{}
+			}
+			configContainer.Volumes = volumes
+		}
+
 		hostConfig := &container.HostConfig{
 			Resources: container.Resources{
 				CPUShares: 512,
 				Memory:    gcontainer.Memory * 1024 * 1024, // 512 MB
 				NanoCPUs:  gcontainer.Cpu,
 			},
+			PortBindings: bindings,
 		}
 
-		networkName := gcontainer.Network.GetString("name")
+		log.Println("on  Create Container bindings", gcontainer.Network)
+
+		networkName := "bridge"
 
 		networkConfig := &network.NetworkingConfig{
 			EndpointsConfig: map[string]*network.EndpointSettings{
@@ -76,6 +110,18 @@ func onBeforeCreateContainer(app *pocketbase.PocketBase) {
 					NetworkID: networkName,
 				},
 			},
+		}
+
+		if gcontainer.Network != nil {
+			networkName := gcontainer.Network.GetString("name")
+			networkConfig := &network.NetworkingConfig{
+				EndpointsConfig: map[string]*network.EndpointSettings{
+					networkName: {
+						NetworkID: networkName,
+					},
+				},
+			}
+			log.Println("on  Create Container bindings", networkConfig)
 		}
 
 		resp, err := cli.ContainerCreate(ctx, configContainer, hostConfig, networkConfig, nil, gcontainer.Name)
@@ -86,7 +132,7 @@ func onBeforeCreateContainer(app *pocketbase.PocketBase) {
 		gcontainer.ContainerId = resp.ID
 		Gtype.FromContainerToRecord(e.Model.(*models.Record), &gcontainer)
 		onStateContainer(cli, ctx, gcontainer.ContainerId, gcontainer.Status, false)
-		ports, ip := onGetPortIpContainer(cli, ctx, gcontainer.ContainerId, gcontainer.Network.GetString("name"))
+		ports, ip := onGetPortIpContainer(cli, ctx, gcontainer.ContainerId, networkName)
 		log.Println("on  onGetPortIpContainer", ports, ip)
 		gcontainer.Port = mapToString(ports)
 		gcontainer.Ip = ip
@@ -135,18 +181,6 @@ func onBeforeUpdateContainer(app *pocketbase.PocketBase) {
 		}
 		defer cli.Close()
 
-		if gcontainer.Deleted != "" {
-
-			if err := cli.ContainerRemove(context.Background(), gcontainer.ContainerId, typesDocker.ContainerRemoveOptions{
-				RemoveVolumes: true, // Set to true if you want to remove the associated volumes as well
-				Force:         true, // Set to true if you want to force the removal of a running container
-			}); err != nil {
-				panic(err)
-			}
-
-			return nil
-		}
-
 		onStateContainer(cli, context.Background(), gcontainer.ContainerId, gcontainer.Status, true)
 		ports, ip := onGetPortIpContainer(cli, context.Background(), gcontainer.ContainerId, gcontainer.Network.GetString("name"))
 		log.Println("on  onGetPortIpContainer", ports, ip)
@@ -160,15 +194,15 @@ func onBeforeUpdateContainer(app *pocketbase.PocketBase) {
 func onStateContainer(cli *client.Client, ctx context.Context, ContainerId string, State string, Trows bool) {
 	log.Println("on  StateContainer", ContainerId, State)
 	var err error
-	if State == "runnig" {
+	if State == "start" {
 		err = cli.ContainerStart(ctx, ContainerId, typesDocker.ContainerStartOptions{})
-	} else if State == "stoped" {
+	} else if State == "stop" {
 		err = cli.ContainerStop(ctx, ContainerId, container.StopOptions{})
-	} else if State == "deleted" {
+	} else if State == "delete" {
 		err = cli.ContainerRemove(ctx, ContainerId, typesDocker.ContainerRemoveOptions{
 			Force: true,
 		})
-	} else if State == "restarts" {
+	} else if State == "restart" {
 		err = cli.ContainerRestart(ctx, ContainerId, container.StopOptions{})
 	}
 	log.Println("on  onStateContainer", err)
