@@ -116,7 +116,11 @@
             </mat-form-field>
             <mat-form-field class="w-100 fs-16" appearance="outline">
               <mat-label>Driver</mat-label>
-              <input matInput type="text" placeholder="Enter driver" formControlName="driver" />
+              <mat-select formControlName="driver">
+                <mat-option *ngFor="let data of selectData" [value]="data.value">
+                  {{ data.viewValue }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
             <button mat-raised-button color="primary" class="btn-form" type="submit" (click)="addData()">
               Add

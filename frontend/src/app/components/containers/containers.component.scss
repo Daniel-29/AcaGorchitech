@@ -63,6 +63,9 @@ mat-panel-description {
   color: #03c9d7;
 }
 
-.status {
+.status-start {
   background-color: #8cee8c;
+}
+.status.stope {
+  background-color: #e46a76;
 }

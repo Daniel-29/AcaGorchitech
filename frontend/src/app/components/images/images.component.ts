@@ -22,22 +22,10 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import Swal from "sweetalert2";
 
-// export interface PeriodicElement {
-//   name: string;
-//   repository: string;
-//   tag: string;
-//   size: string;
-//   imageId: string;
-// }
 interface Test {
   value: string;
   viewValue: string;
 }
-// const ELEMENT_DATA: PeriodicElement[] = [
-//   { name: 'Image name', repository: 'Image repository', tag: 'Image tag', size: 'Image size', imageId: 'Image Id' },
-//   { name: 'Image name', repository: 'Image repository', tag: 'Image tag', size: 'Image size', imageId: 'Image Id' },
-//   { name: 'Image name', repository: 'Image repository', tag: 'Image tag', size: 'Image size', imageId: 'Image Id' },
-// ];
 
 @Component({
   selector: "app-containers",
@@ -47,23 +35,13 @@ interface Test {
     "../../../../node_modules/sweetalert2/src/sweetalert2.scss",
   ],
 })
-
 export class ImagesComponent implements OnInit {
   step = 0;
-  displayedColumns: string[] = [
-    'name', 
-    'repository', 
-    'tag', 
-    'size', 
-    'action'
-  ];
+  displayedColumns: string[] = ["name", "date", "size", "action"];
 
   dataSourceTable!: MatTableDataSource<Image>;
   public createForm: FormGroup = new FormGroup({
     name: new FormControl(null, [Validators.required]),
-    repository: new FormControl(null, [Validators.required]),
-    tag: new FormControl(null, [Validators.required]),
-    size: new FormControl(null, [Validators.required]),
   });
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -76,20 +54,6 @@ export class ImagesComponent implements OnInit {
       this.dataSourceTable.paginator.firstPage();
     }
   }
-
-  tests: Test[] = [
-    { value: "values-1", viewValue: "Value 1" },
-    { value: "values-2", viewValue: "Value 2" },
-    { value: "values-3", viewValue: "Value 3" },
-  ];
-
-  // tests2: Test[] = [
-  //   { value: "values-1", viewValue: "Repository 1" },
-  //   { value: "values-2", viewValue: "Repository 2" },
-  //   { value: "values-3", viewValue: "Repository 3" },
-  // ];
-
-
 
   constructor(private _service: ImageService, public dialog: MatDialog) {}
 
@@ -122,34 +86,13 @@ export class ImagesComponent implements OnInit {
   }
 
   addData() {
-    //Swal.fire("Thank you...", "You submitted succesfully!", "success");
-    // Swal.fire({
-    //   title: "Are you sure want to remove?",
-    //   text: "You will not be able to recover this file!",
-    //   icon: "warning",
-    //   showCancelButton: true,
-    //   confirmButtonText: "Yes, delete it!",
-    //   cancelButtonText: "No, keep it",
-    // }).then((result) => {
-    //   if (result.value) {
-    //     Swal.fire(
-    //       "Deleted!",
-    //       "Your imaginary file has been deleted.",
-    //       "success"
-    //     );
-    //   } else if (result.dismiss === Swal.DismissReason.cancel) {
-    //     Swal.fire("Cancelled", "Your imaginary file is safe :)", "error");
-    //   }
-    // });
-
     if (this.createForm.valid) {
       let data: CreateImage = {
         name: this.createForm.getRawValue().name,
-        repository: this.createForm.getRawValue().repository,
-        tag: this.createForm.getRawValue().tag,
         size: this.createForm.getRawValue().size,
-        date: new Date(),
+        date: new Date().toISOString(),
         imageId: "",
+        deleted: "",
       };
       console.log(data);
       this._service.createImage(data).subscribe((response) => {
@@ -197,10 +140,28 @@ export class ImagesComponent implements OnInit {
   }
 
   deleteData(data: any) {
-    console.log(data);
-    this._service.deleteImage(data.id).subscribe((response) => {
-      console.log(response);
-      this.onLoadRegisters();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(data);
+        let body: any = {
+          id: data.id,
+          deleted: new Date(),
+        };
+        console.log(body);
+        this._service.deleteImage(body).subscribe((response) => {
+          this.onLoadRegisters();
+          console.log(response);
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        });
+      }
     });
   }
 }

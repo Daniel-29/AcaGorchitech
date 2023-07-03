@@ -20,9 +20,11 @@ export class NetworkService {
   constructor(private _http: HttpClient, private _toastr: ToastrService) {}
 
   getNetworks(): Promise<NetworkResponse> {
+    let params = new HttpParams();
+    params = params.append("filter", 'deleted=""');
     return new Promise((resolve, reject) => {
       this._http
-        .get<NetworkResponse>(this._URL + this._NETWORKS)
+        .get<NetworkResponse>(this._URL + this._NETWORKS, { params })
         .pipe(
           take(1),
           catchError((error) => {
@@ -70,9 +72,9 @@ export class NetworkService {
     );
   }
 
-  deleteNetwork(id: Number): Observable<any> {
-    let url = `${this._URL}${this._NETWORKS}/${id}/`;
-    return this._http.delete<ActionResponse>(url).pipe(
+  deleteNetwork(register: any): Observable<any> {
+    let url = `${this._URL}${this._NETWORKS}/${register.id}/`;
+    return this._http.patch<ActionResponse>(url, register).pipe(
       take(1),
       catchError((error) => {
         this.errorHandle(error);

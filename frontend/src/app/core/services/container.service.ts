@@ -9,7 +9,11 @@ import { ToastrService } from "ngx-toastr";
 import { Observable, EMPTY } from "rxjs";
 import { take, catchError, map } from "rxjs/operators";
 import { ActionResponse } from "../interfaces/common";
-import { Container, CreateContainer, ContainerResponse } from "../interfaces/container";
+import {
+  Container,
+  CreateContainer,
+  ContainerResponse,
+} from "../interfaces/container";
 import Swal from "sweetalert2";
 @Injectable({
   providedIn: "root",
@@ -20,9 +24,12 @@ export class ContainerService {
   constructor(private _http: HttpClient, private _toastr: ToastrService) {}
 
   getContainers(): Promise<ContainerResponse> {
+    let params = new HttpParams();
+    params = params.append("filter", 'deleted=""');
+    params = params.append("expand", "id_scope,id_network,id_image,id_volumen");
     return new Promise((resolve, reject) => {
       this._http
-        .get<ContainerResponse>(this._URL + this._CONTAINERS)
+        .get<ContainerResponse>(this._URL + this._CONTAINERS, { params })
         .pipe(
           take(1),
           catchError((error) => {
@@ -70,9 +77,9 @@ export class ContainerService {
     );
   }
 
-  deleteContainer(id: Number): Observable<any> {
-    let url = `${this._URL}${this._CONTAINERS}/${id}/`;
-    return this._http.delete<ActionResponse>(url).pipe(
+  deleteContainer(register: any): Observable<any> {
+    let url = `${this._URL}${this._CONTAINERS}/${register.id}/`;
+    return this._http.patch<ActionResponse>(url, register).pipe(
       take(1),
       catchError((error) => {
         this.errorHandle(error);

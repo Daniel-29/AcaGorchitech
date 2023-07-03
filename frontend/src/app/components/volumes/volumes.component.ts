@@ -21,6 +21,8 @@ import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import Swal from "sweetalert2";
+import { MatSelectModule } from "@angular/material/select";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-containers",
@@ -31,28 +33,18 @@ import Swal from "sweetalert2";
   ],
 })
 export class VolumesComponent implements OnInit {
-  step = 0;
-  displayedColumns: string[] = [
-    "name",
-    "type",
-    "source",
-    "mount",
-    "target",
-    "driver",
-    "label",
-    "size",
-    "action",
+  selectData: any[] = [
+    { value: "local", viewValue: "Local" },
+    //{ value: "nfs", viewValue: "NFS" },
   ];
+  step = 0;
+  displayedColumns: string[] = ["name", "mount", "driver", "label", "action"];
   dataSourceTable!: MatTableDataSource<Volume>;
   public createForm: FormGroup = new FormGroup({
     name: new FormControl(null, [Validators.required]),
-    type: new FormControl(null, [Validators.required]),
-    source: new FormControl(null, [Validators.required]),
-    mount: new FormControl(null, [Validators.required]),
-    target: new FormControl(null, [Validators.required]),
+    mount: new FormControl(""),
     driver: new FormControl(null, [Validators.required]),
     label: new FormControl(null, [Validators.required]),
-    size: new FormControl(null, [Validators.required]),
   });
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -98,14 +90,11 @@ export class VolumesComponent implements OnInit {
     if (this.createForm.valid) {
       let data: CreateVolume = {
         name: this.createForm.getRawValue().name,
-        type: this.createForm.getRawValue().type,
-        source: this.createForm.getRawValue().source,
         mount: this.createForm.getRawValue().mount,
-        target: this.createForm.getRawValue().target,
         driver: this.createForm.getRawValue().driver,
         label: this.createForm.getRawValue().label,
-        size: this.createForm.getRawValue().label,
         volumenld: "",
+        deleted: "",
       };
       console.log(data);
       this._service.createVolume(data).subscribe((response) => {
@@ -155,14 +144,40 @@ export class VolumesComponent implements OnInit {
       }
     });
   }
-
   deleteData(data: any) {
-    console.log(data);
-    this._service.deleteVolume(data.id).subscribe((response) => {
-      console.log(response);
-      this.onLoadRegisters();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(data);
+        let body: any = {
+          id: data.id,
+          deleted: new Date(),
+        };
+        console.log(body);
+        this._service.deleteVolume(body).subscribe((response) => {
+          this.onLoadRegisters();
+          console.log(response);
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        });
+      }
     });
   }
+
+
+  // deleteData(data: any) {
+  //   console.log(data);
+  //   this._service.deleteVolume(data.id).subscribe((response) => {
+  //     console.log(response);
+  //     this.onLoadRegisters();
+  //   });
+  // }
 }
 @Component({
   selector: "modal",
@@ -175,6 +190,8 @@ export class VolumesComponent implements OnInit {
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
+    MatSelectModule,
+    CommonModule,
   ],
 })
 export class Modal {
@@ -191,25 +208,21 @@ export class Modal {
       this.dialogRef.close(this.updateForm.value);
     }
   }
+  selectData: any[] = [
+    { value: "local", viewValue: "Local" },
+    //{ value: "nfs", viewValue: "NFS" },
+  ];
   public updateForm: FormGroup = new FormGroup({
     name: new FormControl(null, [Validators.required]),
-    type: new FormControl(null, [Validators.required]),
-    source: new FormControl(null, [Validators.required]),
     mount: new FormControl(null, [Validators.required]),
-    target: new FormControl(null, [Validators.required]),
     driver: new FormControl(null, [Validators.required]),
     label: new FormControl(null, [Validators.required]),
-    size: new FormControl(null, [Validators.required]),
   });
 
   ngOnInit(): void {
     this.updateForm.controls["name"].setValue(this.data.name);
-    this.updateForm.controls["type"].setValue(this.data.type);
-    this.updateForm.controls["source"].setValue(this.data.source);
     this.updateForm.controls["mount"].setValue(this.data.mount);
-    this.updateForm.controls["target"].setValue(this.data.target);
     this.updateForm.controls["driver"].setValue(this.data.driver);
     this.updateForm.controls["label"].setValue(this.data.label);
-    this.updateForm.controls["size"].setValue(this.data.size);
   }
 }

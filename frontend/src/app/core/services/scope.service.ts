@@ -22,9 +22,11 @@ export class ScopeService {
 
   // get function
   getScopes(): Promise<ScopeResponse> {
+    let params = new HttpParams();
+    params = params.append("filter", 'deleted=""');
     return new Promise((resolve, reject) => {
       this._http
-        .get<ScopeResponse>(this._URL + this._SCOPES)
+        .get<ScopeResponse>(this._URL + this._SCOPES, { params })
         .pipe(
           take(1),
           catchError((error) => {
@@ -76,9 +78,9 @@ export class ScopeService {
   }
 
   // delete function
-  deleteScope(id: Number): Observable<any> {
-    let url = `${this._URL}${this._SCOPES}/${id}/`;
-    return this._http.delete<ActionResponse>(url).pipe(
+  deleteScope(register: any): Observable<any> {
+    let url = `${this._URL}${this._SCOPES}/${register.id}/`;
+    return this._http.patch<ActionResponse>(url, register).pipe(
       take(1),
       catchError((error) => {
         this.errorHandle(error);

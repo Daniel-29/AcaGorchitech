@@ -13,6 +13,7 @@ export interface Network {
   gateway: string;
   driver: string;
   networkId: string;
+  deleted: string;
 }
 
 export interface CreateNetwork {
@@ -23,4 +24,5 @@ export interface CreateNetwork {
   gateway: string;
   driver: string;
   networkId: string;
+  deleted: string;
 }
