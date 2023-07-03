@@ -6,7 +6,7 @@ interface cards {
 }
 
 @Component({
-  selector: 'app-cards',
+  selector: '',
   templateUrl: './cards.component.html',
 })
 export class CardsComponent implements OnInit {

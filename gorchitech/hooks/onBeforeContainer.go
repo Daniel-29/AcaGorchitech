@@ -75,10 +75,14 @@ func onBeforeCreateContainer(app *pocketbase.PocketBase) {
 		}
 
 		configContainer := &container.Config{
-			Labels: Labels,
-			Env:    EnvironmentString,
-			Image:  gcontainer.Image.GetString("name"),
-			Cmd:    CommandStrings,
+			Labels:  Labels,
+			Image:   gcontainer.Image.GetString("name"),
+			Cmd:     CommandStrings,
+			Volumes: map[string]struct{}{},
+		}
+
+		if gcontainer.Environment != "" {
+			configContainer.Env = EnvironmentString
 		}
 
 		if gcontainer.Volumen != nil {
