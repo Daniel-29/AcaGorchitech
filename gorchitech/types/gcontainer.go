@@ -29,7 +29,8 @@ type GContainerRecord struct {
 
 func (s *GContainerRecord) FromRecordToContainer(record *models.Record, app *pocketbase.PocketBase) error {
 	log.Println("on FromRecordToContainer, record", record)
-	errs := app.Dao().ExpandRecord(record, []string{"id_scope", "id_image", "id_volumen", "id_network"}, helpers.AdminExpandFetch(app.Dao()))
+	errs := app.Dao().ExpandRecord(record, []string{"id_scope", "id_image"}, helpers.AdminExpandFetch(app.Dao()))
+
 	log.Println("Error expanding service", errs)
 	if len(errs) > 0 {
 		return errors.New("error expanding service")
@@ -48,8 +49,17 @@ func (s *GContainerRecord) FromRecordToContainer(record *models.Record, app *poc
 	s.Deleted = record.GetString("deleted")
 	s.Scope = record.Expand()["id_scope"].(*models.Record)
 	s.Image = record.Expand()["id_image"].(*models.Record)
-	s.Volumen = record.Expand()["id_volumen"].(*models.Record)
-	s.Network = record.Expand()["id_network"].(*models.Record)
+
+	log.Println("on record.GetString(id_volumen)", record.GetString("id_volumen"))
+
+	if record.GetString("id_volumen") != "" {
+		app.Dao().ExpandRecord(record, []string{"id_volumen"}, helpers.AdminExpandFetch(app.Dao()))
+		s.Volumen = record.Expand()["id_volumen"].(*models.Record)
+	}
+	if record.GetString("id_network") != "" {
+		app.Dao().ExpandRecord(record, []string{"id_network"}, helpers.AdminExpandFetch(app.Dao()))
+		s.Volumen = record.Expand()["id_network"].(*models.Record)
+	}
 	log.Println("on end FromRecordToContainer, record", s)
 	return nil
 }
@@ -69,8 +79,6 @@ func FromContainerToRecord(record *models.Record, gNetwork *GContainerRecord) er
 	record.Set("deleted", gNetwork.Deleted)
 	record.Set("scope", gNetwork.Scope)
 	record.Set("image", gNetwork.Image)
-	record.Set("volumen", gNetwork.Volumen)
-	record.Set("network", gNetwork.Network)
 	log.Println("on end FromContainerToRecord, record", record)
 	return nil
 }

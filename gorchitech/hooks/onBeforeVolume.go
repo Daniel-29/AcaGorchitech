@@ -61,6 +61,7 @@ func onBeforeCreateVolume(app *pocketbase.PocketBase) {
 		}
 		log.Printf("Volume %s has been created with ID %s.\n", volume)
 		gVolumen.VolumenId = volume.Name
+		gVolumen.Mount = volume.Mountpoint
 		Gtype.FromGVolumenToRecord(e.Model.(*models.Record), &gVolumen)
 		log.Println("on  FromGVolumenToRecord")
 		if err != nil {

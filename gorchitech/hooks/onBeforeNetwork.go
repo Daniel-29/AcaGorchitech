@@ -106,7 +106,10 @@ func onBeforeDeleteNetwork(app *pocketbase.PocketBase) {
 			panic(err)
 		}
 		defer cli.Close()
-
+		err = cli.NetworkRemove(context.Background(), gnetwork.NetworkId)
+		if err != nil {
+			panic(err)
+		}
 		log.Println("La red %s ha sido eliminada.\n", gnetwork.NetworkId)
 		return nil
 	})
