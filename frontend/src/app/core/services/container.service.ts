@@ -23,13 +23,17 @@ export class ContainerService {
   private readonly _CONTAINERS = "container/records";
   constructor(private _http: HttpClient, private _toastr: ToastrService) {}
 
-  getContainers(): Promise<ContainerResponse> {
-    let params = new HttpParams();
-    params = params.append("filter", 'deleted=""');
-    params = params.append("expand", "id_scope,id_network,id_image,id_volumen");
+  getContainers(httpParams?: HttpParams): Promise<ContainerResponse> {
+    httpParams != undefined ? null : (httpParams = new HttpParams());
+    httpParams = httpParams?.append("filter", 'deleted=""');
+
+    httpParams = httpParams?.append(
+      "expand",
+      "id_scope,id_network,id_image,id_volumen"
+    );
     return new Promise((resolve, reject) => {
       this._http
-        .get<ContainerResponse>(this._URL + this._CONTAINERS, { params })
+        .get<ContainerResponse>(this._URL + this._CONTAINERS, { params: httpParams })
         .pipe(
           take(1),
           catchError((error) => {
@@ -43,7 +47,7 @@ export class ContainerService {
         .subscribe();
     });
   }
-  createContainer(register: CreateContainer): Observable<any> {
+  createContainer(register: any): Observable<any> {
     console.log(register);
     let url = `${this._URL}${this._CONTAINERS}`;
     return this._http.post<ActionResponse>(url, register).pipe(

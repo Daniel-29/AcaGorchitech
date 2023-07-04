@@ -46,7 +46,7 @@
               <ng-container matColumnDef="volumen">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Volumen</th>
                 <td mat-cell class="fw-medium" *matCellDef="let element">
-                  <p class="mb-0 fw-medium op-5">{{ element.expand.id_volumen.name }}</p>
+                  <p class="mb-0 fw-medium op-5">{{ element.expand.id_volumen?.name }}</p>
                 </td>
               </ng-container>
 
@@ -54,7 +54,7 @@
               <ng-container matColumnDef="network">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Network</th>
                 <td mat-cell class="fw-medium" *matCellDef="let element">
-                  <p class="mb-0 fw-medium op-5">{{ element.expand.id_network.name }}</p>
+                  <p class="mb-0 fw-medium op-5">{{ element.expand.id_network?.name }}</p>
                 </td>
               </ng-container>
 
