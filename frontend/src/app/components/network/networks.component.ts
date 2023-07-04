@@ -67,10 +67,12 @@ export class NetworksComponent implements OnInit {
     }
   }
 
-  tests: Test[] = [
-    { value: "values-1", viewValue: "Value 1" },
-    { value: "values-2", viewValue: "Value 2" },
-    { value: "values-3", viewValue: "Value 3" },
+  selectData: any[] = [
+    { value: "bridge", viewValue: "Bridge" },
+    { value: "host", viewValue: "Host" },
+    { value: "overlay", viewValue: "Overlay" },
+    { value: "macvlan", viewValue: "Macvlan" },
+    { value: "ipvlan", viewValue: "Ipvlan" },
   ];
   constructor(private _service: NetworkService, public dialog: MatDialog) {}
 
@@ -102,26 +104,6 @@ export class NetworksComponent implements OnInit {
   }
 
   addData() {
-    //Swal.fire("Thank you...", "You submitted succesfully!", "success");
-    // Swal.fire({
-    //   title: "Are you sure want to remove?",
-    //   text: "You will not be able to recover this file!",
-    //   icon: "warning",
-    //   showCancelButton: true,
-    //   confirmButtonText: "Yes, delete it!",
-    //   cancelButtonText: "No, keep it",
-    // }).then((result) => {
-    //   if (result.value) {
-    //     Swal.fire(
-    //       "Deleted!",
-    //       "Your imaginary file has been deleted.",
-    //       "success"
-    //     );
-    //   } else if (result.dismiss === Swal.DismissReason.cancel) {
-    //     Swal.fire("Cancelled", "Your imaginary file is safe :)", "error");
-    //   }
-    // });
-
     if (this.createForm.valid) {
       let data: CreateNetwork = {
         name: this.createForm.getRawValue().name,
@@ -131,6 +113,7 @@ export class NetworksComponent implements OnInit {
         gateway: this.createForm.getRawValue().gateway,
         driver: this.createForm.getRawValue().driver,
         networkId: "",
+        deleted: "",
       };
       console.log(data);
       this._service.createNetwork(data).subscribe((response) => {
@@ -157,9 +140,6 @@ export class NetworksComponent implements OnInit {
         name: data.name,
         label: data.label,
         alias: data.alias,
-        subnet: data.subnet,
-        gateway: data.gateway,
-        driver: data.driver,
       },
     });
 
@@ -180,10 +160,28 @@ export class NetworksComponent implements OnInit {
   }
 
   deleteData(data: any) {
-    console.log(data);
-    this._service.deleteNetwork(data.id).subscribe((response) => {
-      console.log(response);
-      this.onLoadRegisters();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(data);
+        let body: any = {
+          id: data.id,
+          deleted: new Date(),
+        };
+        console.log(body);
+        this._service.deleteNetwork(body).subscribe((response) => {
+          this.onLoadRegisters();
+          console.log(response);
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        });
+      }
     });
   }
 }
@@ -218,17 +216,11 @@ export class Modal {
     name: new FormControl(null, [Validators.required]),
     label: new FormControl(null, [Validators.required]),
     alias: new FormControl(null, [Validators.required]),
-    subnet: new FormControl(null, [Validators.required]),
-    gateway: new FormControl(null, [Validators.required]),
-    driver: new FormControl(null, [Validators.required]),
   });
 
   ngOnInit(): void {
     this.updateForm.controls["name"].setValue(this.data.name);
     this.updateForm.controls["label"].setValue(this.data.label);
     this.updateForm.controls["alias"].setValue(this.data.alias);
-    this.updateForm.controls["subnet"].setValue(this.data.subnet);
-    this.updateForm.controls["gateway"].setValue(this.data.gateway);
-    this.updateForm.controls["driver"].setValue(this.data.driver);
   }
 }

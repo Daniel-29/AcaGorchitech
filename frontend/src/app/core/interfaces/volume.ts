@@ -7,24 +7,18 @@ export interface VolumeResponse extends API_RESPONSE {
 export interface Volume {
   id: number;
   name: string;
-  type: string;
-  source: string;
   mount: string;
-  target: string;
   driver: string;
   label: string;
-  size: string;
   volumenld: string;
+  deleted: string;
 }
 
 export interface CreateVolume {
   name: string;
-  type: string;
-  source: string;
   mount: string;
-  target: string;
   driver: string;
   label: string;
-  size: string;
   volumenld: string;
+  deleted: string;
 }

@@ -49,7 +49,7 @@ export class ContainersComponent {
     "volumen",
     "network",
     "memory",
-    "port",
+    "cpu",
     "status",
     "action",
   ];
@@ -62,10 +62,10 @@ export class ContainersComponent {
     name: new FormControl(null, [Validators.required]),
     cpu: new FormControl(null, [Validators.required]),
     memory: new FormControl(null, [Validators.required]),
-    storage: new FormControl(null, [Validators.required]),
     label: new FormControl(null, [Validators.required]),
-    ip: new FormControl(null, [Validators.required]),
-    port: new FormControl(null, [Validators.required]),
+    environment: new FormControl(null, [Validators.required]),
+    command: new FormControl(null, [Validators.required]),
+    // port: new FormControl(null, [Validators.required]),
     status: new FormControl(null, [Validators.required]),
     id_scope: new FormControl(null, [Validators.required]),
     id_image: new FormControl(null, [Validators.required]),
@@ -74,6 +74,16 @@ export class ContainersComponent {
   });
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
+
+  getStatusClass(status: string): string {
+    console.log(status);
+    if (status === 'start' || status === 'restart') {
+      return 'status-start';
+    } else if (status === 'stope') {
+      return 'status-stop';
+    }
+    return 'status-delete';
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -84,10 +94,11 @@ export class ContainersComponent {
     }
   }
 
-  tests: Test[] = [
-    { value: "values-1", viewValue: "Value 1" },
-    { value: "values-2", viewValue: "Value 2" },
-    { value: "values-3", viewValue: "Value 3" },
+  status: Test[] = [
+    { value: "start", viewValue: "Start" },
+    { value: "stop", viewValue: "Stop" },
+    { value: "restart", viewValue: "Restart" },
+    { value: "delete", viewValue: "Delete" },
   ];
   constructor(
     private _service: ContainerService,
@@ -183,7 +194,6 @@ export class ContainersComponent {
         name: this.createForm.getRawValue().name,
         cpu: this.createForm.getRawValue().cpu,
         memory: this.createForm.getRawValue().memory,
-        storage: this.createForm.getRawValue().storage,
         label: this.createForm.getRawValue().label,
         ip: this.createForm.getRawValue().ip,
         port: this.createForm.getRawValue().port,
@@ -193,6 +203,9 @@ export class ContainersComponent {
         id_network: this.createForm.getRawValue().id_network,
         id_volumen: this.createForm.getRawValue().id_volumen,
         containerId: "",
+        deleted: '',
+        environment: this.createForm.getRawValue().environment,
+        command: this.createForm.getRawValue().command,
       };
       console.log(data);
       this._service.createContainer(data).subscribe((response) => {
@@ -249,10 +262,28 @@ export class ContainersComponent {
   }
 
   deleteData(data: any) {
-    console.log(data);
-    this._service.deleteContainer(data.id).subscribe((response) => {
-      console.log(response);
-      this.onLoadRegisters();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(data);
+        let body: any = {
+          id: data.id,
+          deleted: new Date(),
+        };
+        console.log(body);
+        this._service.deleteContainer(body).subscribe((response) => {
+          this.onLoadRegisters();
+          console.log(response);
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        });
+      }
     });
   }
 }

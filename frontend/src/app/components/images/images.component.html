@@ -46,23 +46,12 @@
                   {{ element.name }}
                 </td>
               </ng-image>
-      
-              <!-- Repository Column -->
-              <ng-image matColumnDef="repository">
-                <th mat-header-cell *matHeaderCellDef>Repository</th>
+              <ng-image matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Date</th>
                 <td mat-cell class="fw-medium" *matCellDef="let element">
-                  <p class="mb-0 fw-medium op-5">{{ element.repository }}</p>
+                  <p class="mb-0 fw-medium op-5">{{ element.date }}</p>
                 </td>
               </ng-image>
-      
-              <!-- Tag Column -->
-              <ng-image matColumnDef="tag">
-                <th mat-header-cell *matHeaderCellDef>Tag</th>
-                <td mat-cell class="fw-medium" *matCellDef="let element">
-                  <p class="mb-0 fw-medium op-5">{{ element.tag }}</p>
-                </td>
-              </ng-image>
-      
               <!-- Size Column -->
               <ng-image matColumnDef="size">
                 <th mat-header-cell *matHeaderCellDef>Size</th>
@@ -100,26 +89,7 @@
               <mat-label>Name</mat-label>
               <input matInput type="text" placeholder="Enter your Name" formControlName="name"/>
             </mat-form-field>
-            <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>Repository</mat-label>
-              <mat-select formControlName="repository">
-                <mat-option *ngFor="let test of tests" [value]="test.value">
-                  {{ test.viewValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>Tag</mat-label>
-              <mat-select formControlName="tag">
-                <mat-option *ngFor="let test of tests" [value]="test.value">
-                  {{ test.viewValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="w-100 fs-16" appearance="outline">
-              <mat-label>Size</mat-label>
-              <input matInput type="text" placeholder="Enter the Image Size" formControlName="size"/>
-            </mat-form-field><button
+           <button
             mat-raised-button
             color="primary"
             class="btn-form"

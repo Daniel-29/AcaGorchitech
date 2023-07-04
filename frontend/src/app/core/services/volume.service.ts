@@ -20,9 +20,11 @@ export class VolumeService {
   constructor(private _http: HttpClient, private _toastr: ToastrService) {}
 
   getVolumes(): Promise<VolumeResponse> {
+    let params = new HttpParams();
+    params = params.append("filter", 'deleted=""');
     return new Promise((resolve, reject) => {
       this._http
-        .get<VolumeResponse>(this._URL + this._VOLUMES)
+        .get<VolumeResponse>(this._URL + this._VOLUMES, { params })
         .pipe(
           take(1),
           catchError((error) => {
@@ -70,9 +72,9 @@ export class VolumeService {
     );
   }
 
-  deleteVolume(id: Number): Observable<any> {
-    let url = `${this._URL}${this._VOLUMES}/${id}/`;
-    return this._http.delete<ActionResponse>(url).pipe(
+  deleteVolume(register: any): Observable<any> {
+    let url = `${this._URL}${this._VOLUMES}/${register.id}/`;
+    return this._http.patch<ActionResponse>(url, register).pipe(
       take(1),
       catchError((error) => {
         this.errorHandle(error);

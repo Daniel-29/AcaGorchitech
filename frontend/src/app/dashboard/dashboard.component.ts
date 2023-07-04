@@ -108,8 +108,8 @@ export class DashboardComponent implements OnInit {
       status: "start",
       command: "postgres",
       environment: `POSTGRES_USER=${jsonForm.user},POSTGRES_PASSWORD=${jsonForm.pass},POSTGRES_DB=${jsonForm.dbname}`,
-      id_scope: "iy49dz43zl11ke3", //id_scope: "iy49dz43zl11ke3", agregar el id del scope especifico
-      id_image: "ximyt21n4crvq40", //id_image: "ximyt21n4crvq40", agregar el id de la imagen especifica
+      id_scope: "euzu8mgrp0gokh2", //id_scope: "iy49dz43zl11ke3", agregar el id del scope especifico
+      id_image: "yh5qcieakt8bwp1", //id_image: "ximyt21n4crvq40", agregar el id de la imagen especifica
     };
 
     this._service.createContainer(data).subscribe((response) => {
@@ -174,8 +174,8 @@ export class DashboardComponent implements OnInit {
       status: "start",
       command: "apache2-foreground",
       environment: "",
-      id_scope: "iy49dz43zl11ke3", //id_scope: "iy49dz43zl11ke3", agregar el id del scope especifico
-      id_image: "pnabb8x0wk769iv", //id_image: "ximyt21n4crvq40", agregar el id de la imagen especifica
+      id_scope: "euzu8mgrp0gokh2", //id_scope: "iy49dz43zl11ke3", agregar el id del scope especifico
+      id_image: "fcgqb0dm4b2af2l", //id_image: "ximyt21n4crvq40", agregar el id de la imagen especifica
     };
 
     this._service.createContainer(data).subscribe((response) => {
@@ -187,7 +187,7 @@ export class DashboardComponent implements OnInit {
 
   wordpressList: any[] = []; 
   onLoadContainerWordpress() {
-    let httpParams = new HttpParams().append("filter", 'id_image.id = "pnabb8x0wk769iv"').append("expand", "id_scope,id_image,id_volumen,id_network");
+    let httpParams = new HttpParams().append("filter", 'id_image.id = "fcgqb0dm4b2af2l"').append("expand", "id_scope,id_image,id_volumen,id_network");
     this._service
       .getContainers(httpParams)
       .then((response: any) => {
@@ -202,7 +202,7 @@ export class DashboardComponent implements OnInit {
 
   postgresList: any[] = []; 
   onLoadContainerPostgres() {
-    let httpParams = new HttpParams().append("filter", 'id_image.id = "ximyt21n4crvq40"').append("expand", "id_scope,id_image,id_volumen,id_network");
+    let httpParams = new HttpParams().append("filter", 'id_image.id = "yh5qcieakt8bwp1"').append("expand", "id_scope,id_image,id_volumen,id_network");
     this._service
       .getContainers(httpParams)
       .then((response: any) => {

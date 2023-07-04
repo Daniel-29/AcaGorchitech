@@ -7,18 +7,16 @@ export interface ImageResponse extends API_RESPONSE {
 export interface Image {
   id: number;
   name: string;
-  repository: string;
-  tag: string;
-  size: number;
-  date: Date;
+  size: string;
+  date: string;
   imageId: string;
+  deleted: string;
 }
 
 export interface CreateImage {
   name: string;
-  repository: string;
-  tag: string;
-  size: number;
-  date: Date;
+  size: string;
+  date: string;
   imageId: string;
+  deleted: string;
 }
