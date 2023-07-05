@@ -94,7 +94,20 @@ export class ContainerService {
       })
     );
   }
-
+  updateStatus(register: any): Observable<any> {
+    let url = `${this._URL}${this._CONTAINERS}/${register.id}/`;
+    return this._http.patch<ActionResponse>(url, register).pipe(
+      take(1),
+      catchError((error) => {
+        this.errorHandle(error);
+        return EMPTY;
+      }),
+      map((Response: any) => {
+        return Response;
+      })
+    );
+  }
+  
   successHandle(status: string, code: number, message: string): void {
     this._toastr.success(code + status, message);
   }

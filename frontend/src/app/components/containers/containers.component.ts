@@ -69,20 +69,19 @@ export class ContainersComponent {
     status: new FormControl(null, [Validators.required]),
     id_scope: new FormControl(null, [Validators.required]),
     id_image: new FormControl(null, [Validators.required]),
-    id_network: new FormControl(null, [Validators.required]),
+    id_network: new FormControl(null),
     id_volumen: new FormControl(null, [Validators.required]),
   });
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
   getStatusClass(status: string): string {
-    console.log(status);
-    if (status === 'start' || status === 'restart') {
-      return 'status-start';
-    } else if (status === 'stope') {
-      return 'status-stop';
+    if (status === "start" || status === "restart") {
+      return "status-start";
+    } else if (status === "stop") {
+      return "status-stop";
     }
-    return 'status-delete';
+    return "status-delete";
   }
 
   applyFilter(event: Event) {
@@ -200,10 +199,10 @@ export class ContainersComponent {
         status: this.createForm.getRawValue().status,
         id_scope: this.createForm.getRawValue().id_scope,
         id_image: this.createForm.getRawValue().id_image,
-        id_network: this.createForm.getRawValue().id_network,
+        id_network: "",
         id_volumen: this.createForm.getRawValue().id_volumen,
         containerId: "",
-        deleted: '',
+        deleted: "",
         environment: this.createForm.getRawValue().environment,
         command: this.createForm.getRawValue().command,
       };
@@ -276,6 +275,7 @@ export class ContainersComponent {
         let body: any = {
           id: data.id,
           deleted: new Date(),
+          status: "delete",
         };
         console.log(body);
         this._service.deleteContainer(body).subscribe((response) => {
@@ -284,6 +284,19 @@ export class ContainersComponent {
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
         });
       }
+    });
+  }
+
+  updateStatus(data: any) {
+    console.log(data);
+    let body: any = {
+      id: data.id,
+      status: data.status === "start" ? "stop" : "start",
+    };
+    console.log(body);
+    this._service.updateStatus(body).subscribe((response) => {
+      this.onLoadRegisters();
+      console.log(response);
     });
   }
 }

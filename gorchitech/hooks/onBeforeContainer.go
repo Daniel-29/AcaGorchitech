@@ -185,12 +185,18 @@ func onBeforeUpdateContainer(app *pocketbase.PocketBase) {
 		}
 		defer cli.Close()
 
+		networkName := "bridge"
+		if gcontainer.Network != nil {
+			networkName = gcontainer.Network.GetString("name")
+		}
 		onStateContainer(cli, context.Background(), gcontainer.ContainerId, gcontainer.Status, true)
-		ports, ip := onGetPortIpContainer(cli, context.Background(), gcontainer.ContainerId, gcontainer.Network.GetString("name"))
-		log.Println("on  onGetPortIpContainer", ports, ip)
-		gcontainer.Port = mapToString(ports)
-		gcontainer.Ip = ip
-		Gtype.FromContainerToRecord(e.Model.(*models.Record), &gcontainer)
+		if gcontainer.Status == "start" || gcontainer.Status == "restart" {
+			ports, ip := onGetPortIpContainer(cli, context.Background(), gcontainer.ContainerId, networkName)
+			log.Println("on  onGetPortIpContainer", ports, ip)
+			gcontainer.Port = mapToString(ports)
+			gcontainer.Ip = ip
+			Gtype.FromContainerToRecord(e.Model.(*models.Record), &gcontainer)
+		}
 		return nil
 	})
 }
