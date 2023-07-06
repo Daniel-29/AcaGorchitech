@@ -1,164 +1,136 @@
-<p align="center">
-    <a href="https://pocketbase.io" target="_blank" rel="noopener">
-        <img src="https://i.imgur.com/5qimnm5.png" alt="PocketBase - open source backend in 1 file" />
-    </a>
-</p>
+# Documentación técnica - Gorchitech
 
-<p align="center">
-    <a href="https://github.com/pocketbase/pocketbase/actions/workflows/release.yaml" target="_blank" rel="noopener"><img src="https://github.com/pocketbase/pocketbase/actions/workflows/release.yaml/badge.svg" alt="build" /></a>
-    <a href="https://github.com/pocketbase/pocketbase/releases" target="_blank" rel="noopener"><img src="https://img.shields.io/github/release/pocketbase/pocketbase.svg" alt="Latest releases" /></a>
-<a href="https://app.fossa.com/projects/git%2Bgithub.com%2FDaniel-29%2FAcaGorchitech?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2FDaniel-29%2FAcaGorchitech.svg?type=shield"/></a>
-    <a href="https://pkg.go.dev/github.com/pocketbase/pocketbase" target="_blank" rel="noopener"><img src="https://godoc.org/github.com/ganigeorgiev/fexpr?status.svg" alt="Go package documentation" /></a>
-</p>
+Este archivo readme proporciona información sobre los requisitos, tecnologías utilizadas, estructura de carpetas y detalles sobre cómo ejecutar, construir y realizar pruebas en la aplicación. También se incluyen instrucciones sobre cómo contribuir al proyecto utilizando ramas, problemas (issues) y fusiones (merges).
 
-[PocketBase](https://pocketbase.io) is an open source Go backend, consisting of:
+## Requisitos
 
-- embedded database (_SQLite_) with **realtime subscriptions**
-- built-in **files and users management**
-- convenient **Admin dashboard UI**
-- and simple **REST-ish API**
+Asegúrate de tener instalados los siguientes requisitos antes de continuar:
 
-**For documentation and examples, please visit https://pocketbase.io/docs.**
+- GO
+- Docker
+- Docker-compose
+- Node.js
+- npm
+- Angular CLI
+- Sqlite
 
-> ⚠️ Please keep in mind that PocketBase is still under active development
-> and therefore full backward compatibility is not guaranteed before reaching v1.0.0.
+## Tecnologías utilizadas
+
+La aplicación utiliza las siguientes tecnologías:
+
+- Angular: Un framework de desarrollo de aplicaciones web en TypeScript.
+- GO: Un lenguaje de programación de código abierto para construir aplicaciones escalables y de alto rendimiento.
+- Docker: Una plataforma que permite crear, implementar y ejecutar aplicaciones en contenedores.
+- PocketBase: Una base de datos SQLite de bolsillo para desarrollo y pruebas.
+
+## Estructura de carpetas
+
+La estructura de carpetas de la aplicación es la siguiente:
+
+gorchitech (directorio backend)
+- helpers (directorio)
+- hooks (directorio)
+- migrations (directorio)
+- types (directorio)
+- README.md
+- gorchitech
+- gorchitech.go
+
+frontend (directorio principal)
+- src (directorio)
+- app (directorio)
+- components (directorio)
+- core (directorio)
+- dashboard (directorio)
+- layouts (directorio)
+- app-routing.module.ts
+- app.component.html
+- app.component.scss
+- app.component.ts
+- app.module.ts
+- demo-flexy-module.ts
+- assets (directorio)
+- environments (directorio)
+- favicon.ico
+- index.html
+- main.ts
+- polyfills.ts
+- styles.scss
+- test.ts
+- .gitignore
+- .npmrc
+- angular.json
+- karma.conf.js
+- package-lock.json
+- package.json
+- tsconfig.app.json
+- tsconfig.json
+- tsconfig.spec.json
 
 
-## API SDK clients
+## Ejecución y construcción de GO
 
-The easiest way to interact with the API is to use one of the official SDK clients:
+Sigue los pasos a continuación para ejecutar y construir la aplicación en GO:
 
-- **JavaScript - [pocketbase/js-sdk](https://github.com/pocketbase/js-sdk)** (_browser and node_)
-- **Dart - [pocketbase/dart-sdk](https://github.com/pocketbase/dart-sdk)** (_web, mobile, desktop_)
+1. Clona el repositorio desde GitHub.
+2. Abre una terminal y navega hasta el directorio `gorchitech`.
+3. Ejecuta el siguiente comando para construir la aplicación en GO:
 
-
-## Overview
-
-PocketBase could be [downloaded directly as a standalone app](https://github.com/pocketbase/pocketbase/releases) or it could be used as a Go framework/toolkit which allows you to build
-your own custom app specific business logic and still have a single portable executable at the end.
-
-### Installation
-
-```sh
-# go 1.18+
-go get github.com/pocketbase/pocketbase
 ```
-> For Windows, you may have to use go 1.19+ due to an incorrect js mime type in the Windows Registry (see [issue#6](https://github.com/pocketbase/pocketbase/issues/6)).
-
-### Example
-
-```go
-package main
-
-import (
-    "log"
-    "net/http"
-
-    "github.com/labstack/echo/v5"
-    "github.com/pocketbase/pocketbase"
-    "github.com/pocketbase/pocketbase/apis"
-    "github.com/pocketbase/pocketbase/core"
-)
-
-func main() {
-    app := pocketbase.New()
-
-    app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-        // add new "GET /hello" route to the app router (echo)
-        e.Router.AddRoute(echo.Route{
-            Method: http.MethodGet,
-            Path:   "/hello",
-            Handler: func(c echo.Context) error {
-                return c.String(200, "Hello world!")
-            },
-            Middlewares: []echo.MiddlewareFunc{
-                apis.ActivityLogger(app),
-            },
-        })
-
-        return nil
-    })
-
-    if err := app.Start(); err != nil {
-        log.Fatal(err)
-    }
-}
+go build
 ```
 
-### Running and building
+4. A continuación, ejecuta el siguiente comando para ejecutar la aplicación en GO:
 
-Running/building the application is the same as for any other Go program, aka. just `go run` and `go build`.
-
-**PocketBase embeds SQLite, but doesn't require CGO.**
-
-If CGO is enabled (aka. `CGO_ENABLED=1`), it will use [mattn/go-sqlite3](https://pkg.go.dev/github.com/mattn/go-sqlite3) driver, otherwise - [modernc.org/sqlite](https://pkg.go.dev/modernc.org/sqlite).
-Enable CGO only if you really need to squeeze the read/write query performance at the expense of complicating cross compilation.
-
-To build the minimal standalone executable, like the prebuilt ones in the releases page, you can simply run `go build` inside the `examples/base` directory:
-
-0. [Install Go 1.18+](https://go.dev/doc/install) (_if you haven't already_)
-1. Clone/download the repo
-2. Navigate to `examples/base`
-3. Run `GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build`
-    (_https://go.dev/doc/install/source#environment_)
-4. Start the created executable by running `./base serve`.
-
-The supported build targets by the non-cgo driver at the moment are:
 ```
-darwin  amd64
-darwin  arm64
-freebsd amd64
-freebsd arm64
-linux   386
-linux   amd64
-linux   arm
-linux   arm64
-linux   ppc64le
-linux   riscv64
-windows amd64
-windows arm64
+go run gorchitech.go
 ```
 
-### Testing
 
-PocketBase comes with mixed bag of unit and integration tests.
-To run them, use the default `go test` command:
-```sh
+## Ejecución y construcción de Angular
+
+Sigue los pasos a continuación para ejecutar y construir la aplicación en Angular:
+
+1. Clona el repositorio desde GitHub.
+2. Abre una terminal y navega hasta el directorio `frontend`.
+3. Ejecuta el siguiente comando para instalar las dependencias de Node.js:
+
+```
+npm install
+```
+
+4. A continuación, ejecuta el siguiente comando para iniciar la aplicación Angular:
+
+```
+ng serve
+```
+
+
+Una vez completados estos pasos, la aplicación estará en funcionamiento y podrás acceder a ella a través de tu navegador web en la dirección `http://localhost:4200`.
+
+## Pruebas en GO
+
+Para ejecutar las pruebas en GO, sigue estos pasos:
+
+1. Asegúrate de haber seguido los pasos anteriores para construir y ejecutar la aplicación en GO.
+2. Abre una terminal y navega hasta el directorio `gorchitech`.
+3. Ejecuta el siguiente comando para ejecutar las pruebas en GO:
+
+```
 go test ./...
 ```
 
-Check also the [Testing guide](http://pocketbase.io/docs/testing) to learn how to write your own custom application tests.
+Esto ejecutará las pruebas unitarias para la aplicación en GO.
 
-## Security
+## Contribución al proyecto
 
-If you discover a security vulnerability within PocketBase, please send an e-mail to **support at pocketbase.io**.
+Si deseas contribuir al proyecto, sigue las siguientes pautas:
 
-All reports will be promptly addressed, and you'll be credited accordingly.
+- Utiliza ramas (`branches`) para trabajar en nuevas características o solucionar problemas.
+- Crea problemas (`issues`) para describir las tareas, mejoras o errores que se abordarán.
+- Utiliza fusiones (`merges`) para combinar tus cambios en la rama principal (`master`) una vez que hayas completado tu trabajo en una rama de características.
+- Asegúrate de comentar y documentar adecuadamente tu código para facilitar la revisión y comprensión de los cambios propuestos.
 
-
-## Contributing
-
-PocketBase is free and open source project licensed under the [MIT License](LICENSE.md).
-You are free to do whatever you want with it, even offering it as a paid service.
-
-You could help continuing its development by:
-
-- [Contribute to the source code](CONTRIBUTING.md)
-- [Suggest new features and report issues](https://github.com/pocketbase/pocketbase/issues)
-- [Donate a small amount](https://pocketbase.io/support-us)
-
-PRs for _small features_ (eg. adding new OAuth2 providers), bug and documentation fixes, etc. are more than welcome.
-
-But please refrain creating PRs for _big features_ without previously discussing the implementation details. Reviewing big PRs often requires a lot of time and tedious back-and-forth communication.
-PocketBase has a [roadmap](https://github.com/orgs/pocketbase/projects/2)
-and I try to work on issues in a specific order and such PRs often come in out of nowhere and skew all initial planning.
-
-Don't get upset if I close your PR, even if it is well executed and tested. This doesn't mean that it will never be merged.
-Later we can always refer to it and/or take pieces of your implementation when the time comes to work on the issue (don't worry you'll be credited in the release notes).
-
-_Please also note that PocketBase was initially created to serve as a new backend for my other open source project - [Presentator](https://presentator.io) (see [#183](https://github.com/presentator/presentator/issues/183)),
-so all feature requests will be first aligned with what we need for Presentator v3._
+¡Gracias por contribuir a nuestro proyecto! Esperamos recibir tus aportes en forma de ramas y problemas (issues).
 
 
-## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDaniel-29%2FAcaGorchitech.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDaniel-29%2FAcaGorchitech?ref=badge_large)
