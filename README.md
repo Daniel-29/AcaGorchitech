@@ -7,6 +7,7 @@
 <p align="center">
     <a href="https://github.com/pocketbase/pocketbase/actions/workflows/release.yaml" target="_blank" rel="noopener"><img src="https://github.com/pocketbase/pocketbase/actions/workflows/release.yaml/badge.svg" alt="build" /></a>
     <a href="https://github.com/pocketbase/pocketbase/releases" target="_blank" rel="noopener"><img src="https://img.shields.io/github/release/pocketbase/pocketbase.svg" alt="Latest releases" /></a>
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2FDaniel-29%2FAcaGorchitech?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2FDaniel-29%2FAcaGorchitech.svg?type=shield"/></a>
     <a href="https://pkg.go.dev/github.com/pocketbase/pocketbase" target="_blank" rel="noopener"><img src="https://godoc.org/github.com/ganigeorgiev/fexpr?status.svg" alt="Go package documentation" /></a>
 </p>
 
@@ -157,3 +158,7 @@ Later we can always refer to it and/or take pieces of your implementation when t
 
 _Please also note that PocketBase was initially created to serve as a new backend for my other open source project - [Presentator](https://presentator.io) (see [#183](https://github.com/presentator/presentator/issues/183)),
 so all feature requests will be first aligned with what we need for Presentator v3._
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDaniel-29%2FAcaGorchitech.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDaniel-29%2FAcaGorchitech?ref=badge_large)
