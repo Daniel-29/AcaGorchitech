@@ -1,3 +1,5 @@
+# Manual de usuario - Gorchitech
+https://drive.google.com/file/d/1DvCQImRLz7CCbogMxJnNfT_Ie1LyFLQh/view?usp=sharing
 # Documentación técnica - Gorchitech
 
 Este archivo readme proporciona información sobre los requisitos, tecnologías utilizadas, estructura de carpetas y detalles sobre cómo ejecutar, construir y realizar pruebas en la aplicación. También se incluyen instrucciones sobre cómo contribuir al proyecto utilizando ramas, problemas (issues) y fusiones (merges).
